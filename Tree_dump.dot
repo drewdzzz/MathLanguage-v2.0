@@ -1,0 +1,1554 @@
+digraph Tree{
+"tree_node0x55fbaf74bab0" [label = "Блок-Узел 
+ Address: 0x55fbaf74bab0
+ Left: 0x55fbaf74bf90 
+ Right: 0x55fbaf74e160 
+ Father: (nil)
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74bf90" [label = "DEF:
+БезБогданова 
+ Address: 0x55fbaf74bf90
+ Left: 0x55fbaf74bff0 
+ Right: 0x55fbaf74c040 
+ Father: 0x55fbaf74bab0
+ code: 0
+ type: 7
+ value: 0"]
+"tree_node0x55fbaf74bff0" [label = "Функция: БезБогданова
+Аргумент: Саранчин
+ 
+ Address: 0x55fbaf74bff0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74bf90
+ code: 0
+ type: 8
+ value: 0"]
+"tree_node0x55fbaf74c040" [label = "Блок-Узел 
+ Address: 0x55fbaf74c040
+ Left: 0x55fbaf74c070 
+ Right: 0x55fbaf74e010 
+ Father: 0x55fbaf74bf90
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74c070" [label = "Если 
+ Address: 0x55fbaf74c070
+ Left: 0x55fbaf74df50 
+ Right: 0x55fbaf74dfb0 
+ Father: 0x55fbaf74c040
+ code: 0
+ type: 3
+ value: 0"]
+"tree_node0x55fbaf74df50" [label = "НеРавномощен 
+ Address: 0x55fbaf74df50
+ Left: 0x55fbaf74df20 
+ Right: 0x55fbaf74df80 
+ Father: 0x55fbaf74c070
+ code: 0
+ type: 2
+ value: 0"]
+"tree_node0x55fbaf74df20" [label = "Функция: БезБогданова
+Аргумент: Саранчин
+ 
+ Address: 0x55fbaf74df20
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74df50
+ code: 0
+ type: 8
+ value: 0"]
+"tree_node0x55fbaf74df80" [label = "0 
+ Address: 0x55fbaf74df80
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74df50
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74dfb0" [label = "Держи_Уд 
+ Address: 0x55fbaf74dfb0
+ Left: (nil) 
+ Right: 0x55fbaf74dfe0 
+ Father: 0x55fbaf74c070
+ code: 4
+ type: 4
+ value: 5.60519e-45"]
+"tree_node0x55fbaf74dfe0" [label = "-666.66 
+ Address: 0x55fbaf74dfe0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74dfb0
+ code: 61
+ type: 0
+ value: -666.66"]
+"tree_node0x55fbaf74e010" [label = "Блок-Узел 
+ Address: 0x55fbaf74e010
+ Left: 0x55fbaf74e040 
+ Right: (nil) 
+ Father: 0x55fbaf74c040
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74e040" [label = "Если 
+ Address: 0x55fbaf74e040
+ Left: 0x55fbaf74e0a0 
+ Right: 0x55fbaf74e100 
+ Father: 0x55fbaf74e010
+ code: 0
+ type: 3
+ value: 0"]
+"tree_node0x55fbaf74e0a0" [label = "Равномощен 
+ Address: 0x55fbaf74e0a0
+ Left: 0x55fbaf74e070 
+ Right: 0x55fbaf74e0d0 
+ Father: 0x55fbaf74e040
+ code: 1
+ type: 2
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74e070" [label = "Функция: БезБогданова
+Аргумент: Саранчин
+ 
+ Address: 0x55fbaf74e070
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e0a0
+ code: 0
+ type: 8
+ value: 0"]
+"tree_node0x55fbaf74e0d0" [label = "0 
+ Address: 0x55fbaf74e0d0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e0a0
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74e100" [label = "Держи_Уд 
+ Address: 0x55fbaf74e100
+ Left: (nil) 
+ Right: 0x55fbaf74e130 
+ Father: 0x55fbaf74e040
+ code: 4
+ type: 4
+ value: 5.60519e-45"]
+"tree_node0x55fbaf74e130" [label = "888.88 
+ Address: 0x55fbaf74e130
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e100
+ code: 82
+ type: 0
+ value: 888.88"]
+"tree_node0x55fbaf74e160" [label = "Блок-Узел 
+ Address: 0x55fbaf74e160
+ Left: 0x55fbaf74e190 
+ Right: 0x55fbaf74e920 
+ Father: 0x55fbaf74bab0
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74e190" [label = "DEF:
+ЛинейноеУравнение 
+ Address: 0x55fbaf74e190
+ Left: 0x55fbaf74e1f0 
+ Right: 0x55fbaf74e290 
+ Father: 0x55fbaf74e160
+ code: 1
+ type: 7
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74e1f0" [label = "Функция: ЛинейноеУравнение
+Аргумент: Богданов
+ 
+ Address: 0x55fbaf74e1f0
+ Left: 0x55fbaf74e240 
+ Right: (nil) 
+ Father: 0x55fbaf74e190
+ code: 0
+ type: 8
+ value: 0"]
+"tree_node0x55fbaf74e240" [label = "Функция: ЛинейноеУравнение
+Аргумент: Саранчин
+ 
+ Address: 0x55fbaf74e240
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e1f0
+ code: 1
+ type: 8
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74e290" [label = "Блок-Узел 
+ Address: 0x55fbaf74e290
+ Left: 0x55fbaf74e2c0 
+ Right: 0x55fbaf74e440 
+ Father: 0x55fbaf74e190
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74e2c0" [label = "Если 
+ Address: 0x55fbaf74e2c0
+ Left: 0x55fbaf74e320 
+ Right: 0x55fbaf74e380 
+ Father: 0x55fbaf74e290
+ code: 0
+ type: 3
+ value: 0"]
+"tree_node0x55fbaf74e320" [label = "Равномощен 
+ Address: 0x55fbaf74e320
+ Left: 0x55fbaf74e2f0 
+ Right: 0x55fbaf74e350 
+ Father: 0x55fbaf74e2c0
+ code: 1
+ type: 2
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74e2f0" [label = "Функция: ЛинейноеУравнение
+Аргумент: Богданов
+ 
+ Address: 0x55fbaf74e2f0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e320
+ code: 0
+ type: 8
+ value: 0"]
+"tree_node0x55fbaf74e350" [label = "0 
+ Address: 0x55fbaf74e350
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e320
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74e380" [label = "Держи_Уд 
+ Address: 0x55fbaf74e380
+ Left: (nil) 
+ Right: 0x55fbaf74e3b0 
+ Father: 0x55fbaf74e2c0
+ code: 4
+ type: 4
+ value: 5.60519e-45"]
+"tree_node0x55fbaf74e3b0" [label = "CALLING:
+БезБогданова 
+ Address: 0x55fbaf74e3b0
+ Left: (nil) 
+ Right: 0x55fbaf74e3e0 
+ Father: 0x55fbaf74e380
+ code: 0
+ type: 9
+ value: 0"]
+"tree_node0x55fbaf74e3e0" [label = "Блок-Узел 
+ Address: 0x55fbaf74e3e0
+ Left: 0x55fbaf74e410 
+ Right: (nil) 
+ Father: 0x55fbaf74e3b0
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74e410" [label = "Функция: ЛинейноеУравнение
+Аргумент: Саранчин
+ 
+ Address: 0x55fbaf74e410
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e3e0
+ code: 1
+ type: 8
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74e440" [label = "Блок-Узел 
+ Address: 0x55fbaf74e440
+ Left: 0x55fbaf74e470 
+ Right: 0x55fbaf74e650 
+ Father: 0x55fbaf74e290
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74e470" [label = "Если 
+ Address: 0x55fbaf74e470
+ Left: 0x55fbaf74e4d0 
+ Right: 0x55fbaf74e530 
+ Father: 0x55fbaf74e440
+ code: 0
+ type: 3
+ value: 0"]
+"tree_node0x55fbaf74e4d0" [label = "НеРавномощен 
+ Address: 0x55fbaf74e4d0
+ Left: 0x55fbaf74e4a0 
+ Right: 0x55fbaf74e500 
+ Father: 0x55fbaf74e470
+ code: 0
+ type: 2
+ value: 0"]
+"tree_node0x55fbaf74e4a0" [label = "Функция: ЛинейноеУравнение
+Аргумент: Богданов
+ 
+ Address: 0x55fbaf74e4a0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e4d0
+ code: 0
+ type: 8
+ value: 0"]
+"tree_node0x55fbaf74e500" [label = "0 
+ Address: 0x55fbaf74e500
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e4d0
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74e530" [label = "Если 
+ Address: 0x55fbaf74e530
+ Left: 0x55fbaf74e590 
+ Right: 0x55fbaf74e5f0 
+ Father: 0x55fbaf74e470
+ code: 0
+ type: 3
+ value: 0"]
+"tree_node0x55fbaf74e590" [label = "Равномощен 
+ Address: 0x55fbaf74e590
+ Left: 0x55fbaf74e560 
+ Right: 0x55fbaf74e5c0 
+ Father: 0x55fbaf74e530
+ code: 1
+ type: 2
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74e560" [label = "Функция: ЛинейноеУравнение
+Аргумент: Саранчин
+ 
+ Address: 0x55fbaf74e560
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e590
+ code: 1
+ type: 8
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74e5c0" [label = "0 
+ Address: 0x55fbaf74e5c0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e590
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74e5f0" [label = "Держи_Уд 
+ Address: 0x55fbaf74e5f0
+ Left: (nil) 
+ Right: 0x55fbaf74e620 
+ Father: 0x55fbaf74e530
+ code: 4
+ type: 4
+ value: 5.60519e-45"]
+"tree_node0x55fbaf74e620" [label = "0 
+ Address: 0x55fbaf74e620
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e5f0
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74e650" [label = "Блок-Узел 
+ Address: 0x55fbaf74e650
+ Left: 0x55fbaf74e680 
+ Right: (nil) 
+ Father: 0x55fbaf74e440
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74e680" [label = "Если 
+ Address: 0x55fbaf74e680
+ Left: 0x55fbaf74e6e0 
+ Right: 0x55fbaf74e740 
+ Father: 0x55fbaf74e650
+ code: 0
+ type: 3
+ value: 0"]
+"tree_node0x55fbaf74e6e0" [label = "НеРавномощен 
+ Address: 0x55fbaf74e6e0
+ Left: 0x55fbaf74e6b0 
+ Right: 0x55fbaf74e710 
+ Father: 0x55fbaf74e680
+ code: 0
+ type: 2
+ value: 0"]
+"tree_node0x55fbaf74e6b0" [label = "Функция: ЛинейноеУравнение
+Аргумент: Богданов
+ 
+ Address: 0x55fbaf74e6b0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e6e0
+ code: 0
+ type: 8
+ value: 0"]
+"tree_node0x55fbaf74e710" [label = "0 
+ Address: 0x55fbaf74e710
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e6e0
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74e740" [label = "Если 
+ Address: 0x55fbaf74e740
+ Left: 0x55fbaf74e7a0 
+ Right: 0x55fbaf74e800 
+ Father: 0x55fbaf74e680
+ code: 0
+ type: 3
+ value: 0"]
+"tree_node0x55fbaf74e7a0" [label = "НеРавномощен 
+ Address: 0x55fbaf74e7a0
+ Left: 0x55fbaf74e770 
+ Right: 0x55fbaf74e7d0 
+ Father: 0x55fbaf74e740
+ code: 0
+ type: 2
+ value: 0"]
+"tree_node0x55fbaf74e770" [label = "Функция: ЛинейноеУравнение
+Аргумент: Саранчин
+ 
+ Address: 0x55fbaf74e770
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e7a0
+ code: 1
+ type: 8
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74e7d0" [label = "0 
+ Address: 0x55fbaf74e7d0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e7a0
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74e800" [label = "Держи_Уд 
+ Address: 0x55fbaf74e800
+ Left: (nil) 
+ Right: 0x55fbaf74e8c0 
+ Father: 0x55fbaf74e740
+ code: 4
+ type: 4
+ value: 5.60519e-45"]
+"tree_node0x55fbaf74e8c0" [label = "Поделен 
+ Address: 0x55fbaf74e8c0
+ Left: 0x55fbaf74e860 
+ Right: 0x55fbaf74e8f0 
+ Father: 0x55fbaf74e800
+ code: 7
+ type: 2
+ value: 9.80909e-45"]
+"tree_node0x55fbaf74e860" [label = "Минус 
+ Address: 0x55fbaf74e860
+ Left: 0x55fbaf74e830 
+ Right: 0x55fbaf74e890 
+ Father: 0x55fbaf74e8c0
+ code: 5
+ type: 2
+ value: 7.00649e-45"]
+"tree_node0x55fbaf74e830" [label = "0 
+ Address: 0x55fbaf74e830
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e860
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74e890" [label = "Функция: ЛинейноеУравнение
+Аргумент: Саранчин
+ 
+ Address: 0x55fbaf74e890
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e860
+ code: 1
+ type: 8
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74e8f0" [label = "Функция: ЛинейноеУравнение
+Аргумент: Богданов
+ 
+ Address: 0x55fbaf74e8f0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74e8c0
+ code: 0
+ type: 8
+ value: 0"]
+"tree_node0x55fbaf74e920" [label = "Блок-Узел 
+ Address: 0x55fbaf74e920
+ Left: 0x55fbaf74e980 
+ Right: (nil) 
+ Father: 0x55fbaf74e160
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74e980" [label = "MAIN 
+ Address: 0x55fbaf74e980
+ Left: (nil) 
+ Right: 0x55fbaf74e9b0 
+ Father: (nil)
+ code: 0
+ type: 6
+ value: 0"]
+"tree_node0x55fbaf74e9b0" [label = "Блок-Узел 
+ Address: 0x55fbaf74e9b0
+ Left: 0x55fbaf74ea10 
+ Right: 0x55fbaf74ea70 
+ Father: (nil)
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74ea10" [label = "ПревратилсяВ 
+ Address: 0x55fbaf74ea10
+ Left: 0x55fbaf74e9e0 
+ Right: 0x55fbaf74ea40 
+ Father: 0x55fbaf74e9b0
+ code: 9
+ type: 2
+ value: 1.26117e-44"]
+"tree_node0x55fbaf74e9e0" [label = "Архимед 
+ Address: 0x55fbaf74e9e0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74ea10
+ code: 0
+ type: 1
+ value: 0"]
+"tree_node0x55fbaf74ea40" [label = "10 
+ Address: 0x55fbaf74ea40
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74ea10
+ code: 0
+ type: 0
+ value: 10"]
+"tree_node0x55fbaf74ea70" [label = "Блок-Узел 
+ Address: 0x55fbaf74ea70
+ Left: 0x55fbaf74ead0 
+ Right: 0x55fbaf74eb30 
+ Father: 0x55fbaf74e9b0
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74ead0" [label = "ПревратилсяВ 
+ Address: 0x55fbaf74ead0
+ Left: 0x55fbaf74eaa0 
+ Right: 0x55fbaf74eb00 
+ Father: 0x55fbaf74ea70
+ code: 9
+ type: 2
+ value: 1.26117e-44"]
+"tree_node0x55fbaf74eaa0" [label = "Богданов 
+ Address: 0x55fbaf74eaa0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74ead0
+ code: 1
+ type: 1
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74eb00" [label = "20 
+ Address: 0x55fbaf74eb00
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74ead0
+ code: 0
+ type: 0
+ value: 20"]
+"tree_node0x55fbaf74eb30" [label = "Блок-Узел 
+ Address: 0x55fbaf74eb30
+ Left: 0x55fbaf74eb90 
+ Right: 0x55fbaf74ebf0 
+ Father: 0x55fbaf74ea70
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74eb90" [label = "ПревратилсяВ 
+ Address: 0x55fbaf74eb90
+ Left: 0x55fbaf74eb60 
+ Right: 0x55fbaf74ebc0 
+ Father: 0x55fbaf74eb30
+ code: 9
+ type: 2
+ value: 1.26117e-44"]
+"tree_node0x55fbaf74eb60" [label = "Саранчин 
+ Address: 0x55fbaf74eb60
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74eb90
+ code: 2
+ type: 1
+ value: 2.8026e-45"]
+"tree_node0x55fbaf74ebc0" [label = "30 
+ Address: 0x55fbaf74ebc0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74eb90
+ code: 0
+ type: 0
+ value: 30"]
+"tree_node0x55fbaf74ebf0" [label = "Блок-Узел 
+ Address: 0x55fbaf74ebf0
+ Left: 0x55fbaf74ec20 
+ Right: 0x55fbaf74ee30 
+ Father: 0x55fbaf74eb30
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74ec20" [label = "Если 
+ Address: 0x55fbaf74ec20
+ Left: 0x55fbaf74ec80 
+ Right: 0x55fbaf74ed10 
+ Father: 0x55fbaf74ebf0
+ code: 0
+ type: 3
+ value: 0"]
+"tree_node0x55fbaf74ec80" [label = "Равномощен 
+ Address: 0x55fbaf74ec80
+ Left: 0x55fbaf74ec50 
+ Right: 0x55fbaf74ecb0 
+ Father: 0x55fbaf74ec20
+ code: 1
+ type: 2
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74ec50" [label = "Архимед 
+ Address: 0x55fbaf74ec50
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74ec80
+ code: 0
+ type: 1
+ value: 0"]
+"tree_node0x55fbaf74ecb0" [label = "0 
+ Address: 0x55fbaf74ecb0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74ec80
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74ed10" [label = "ПревратилсяВ 
+ Address: 0x55fbaf74ed10
+ Left: 0x55fbaf74ece0 
+ Right: 0x55fbaf74ed40 
+ Father: 0x55fbaf74ec20
+ code: 9
+ type: 2
+ value: 1.26117e-44"]
+"tree_node0x55fbaf74ece0" [label = "Ассистент 
+ Address: 0x55fbaf74ece0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74ed10
+ code: 4
+ type: 1
+ value: 5.60519e-45"]
+"tree_node0x55fbaf74ed40" [label = "CALLING:
+ЛинейноеУравнение 
+ Address: 0x55fbaf74ed40
+ Left: (nil) 
+ Right: 0x55fbaf74ed70 
+ Father: 0x55fbaf74ed10
+ code: 1
+ type: 9
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74ed70" [label = "Блок-Узел 
+ Address: 0x55fbaf74ed70
+ Left: 0x55fbaf74eda0 
+ Right: 0x55fbaf74edd0 
+ Father: 0x55fbaf74ed40
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74eda0" [label = "Богданов 
+ Address: 0x55fbaf74eda0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74ed70
+ code: 1
+ type: 1
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74edd0" [label = "Блок-Узел 
+ Address: 0x55fbaf74edd0
+ Left: 0x55fbaf74ee00 
+ Right: (nil) 
+ Father: 0x55fbaf74ed70
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74ee00" [label = "Саранчин 
+ Address: 0x55fbaf74ee00
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74edd0
+ code: 2
+ type: 1
+ value: 2.8026e-45"]
+"tree_node0x55fbaf74ee30" [label = "Блок-Узел 
+ Address: 0x55fbaf74ee30
+ Left: 0x55fbaf74ee60 
+ Right: 0x55fbaf74ef80 
+ Father: 0x55fbaf74ebf0
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74ee60" [label = "Если 
+ Address: 0x55fbaf74ee60
+ Left: 0x55fbaf74eec0 
+ Right: 0x55fbaf74ef20 
+ Father: 0x55fbaf74ee30
+ code: 0
+ type: 3
+ value: 0"]
+"tree_node0x55fbaf74eec0" [label = "Равномощен 
+ Address: 0x55fbaf74eec0
+ Left: 0x55fbaf74ee90 
+ Right: 0x55fbaf74eef0 
+ Father: 0x55fbaf74ee60
+ code: 1
+ type: 2
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74ee90" [label = "Архимед 
+ Address: 0x55fbaf74ee90
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74eec0
+ code: 0
+ type: 1
+ value: 0"]
+"tree_node0x55fbaf74eef0" [label = "0 
+ Address: 0x55fbaf74eef0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74eec0
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74ef20" [label = "Выписать 
+ Address: 0x55fbaf74ef20
+ Left: (nil) 
+ Right: 0x55fbaf74ef50 
+ Father: 0x55fbaf74ee60
+ code: 3
+ type: 4
+ value: 4.2039e-45"]
+"tree_node0x55fbaf74ef50" [label = "Ассистент 
+ Address: 0x55fbaf74ef50
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74ef20
+ code: 4
+ type: 1
+ value: 5.60519e-45"]
+"tree_node0x55fbaf74ef80" [label = "Блок-Узел 
+ Address: 0x55fbaf74ef80
+ Left: 0x55fbaf74efb0 
+ Right: 0x55fbaf74f0d0 
+ Father: 0x55fbaf74ee30
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74efb0" [label = "Если 
+ Address: 0x55fbaf74efb0
+ Left: 0x55fbaf74f010 
+ Right: 0x55fbaf74f070 
+ Father: 0x55fbaf74ef80
+ code: 0
+ type: 3
+ value: 0"]
+"tree_node0x55fbaf74f010" [label = "Равномощен 
+ Address: 0x55fbaf74f010
+ Left: 0x55fbaf74efe0 
+ Right: 0x55fbaf74f040 
+ Father: 0x55fbaf74efb0
+ code: 1
+ type: 2
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74efe0" [label = "Архимед 
+ Address: 0x55fbaf74efe0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f010
+ code: 0
+ type: 1
+ value: 0"]
+"tree_node0x55fbaf74f040" [label = "0 
+ Address: 0x55fbaf74f040
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f010
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74f070" [label = "Держи_Уд 
+ Address: 0x55fbaf74f070
+ Left: (nil) 
+ Right: 0x55fbaf74f0a0 
+ Father: 0x55fbaf74efb0
+ code: 4
+ type: 4
+ value: 5.60519e-45"]
+"tree_node0x55fbaf74f0a0" [label = "3 
+ Address: 0x55fbaf74f0a0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f070
+ code: 0
+ type: 0
+ value: 3"]
+"tree_node0x55fbaf74f0d0" [label = "Блок-Узел 
+ Address: 0x55fbaf74f0d0
+ Left: 0x55fbaf74f130 
+ Right: 0x55fbaf74f310 
+ Father: 0x55fbaf74ef80
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74f130" [label = "ПревратилсяВ 
+ Address: 0x55fbaf74f130
+ Left: 0x55fbaf74f100 
+ Right: 0x55fbaf74f1f0 
+ Father: 0x55fbaf74f0d0
+ code: 9
+ type: 2
+ value: 1.26117e-44"]
+"tree_node0x55fbaf74f100" [label = "Дашков 
+ Address: 0x55fbaf74f100
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f130
+ code: 3
+ type: 1
+ value: 4.2039e-45"]
+"tree_node0x55fbaf74f1f0" [label = "Минус 
+ Address: 0x55fbaf74f1f0
+ Left: 0x55fbaf74f190 
+ Right: 0x55fbaf74f2b0 
+ Father: 0x55fbaf74f130
+ code: 5
+ type: 2
+ value: 7.00649e-45"]
+"tree_node0x55fbaf74f190" [label = "Помножен 
+ Address: 0x55fbaf74f190
+ Left: 0x55fbaf74f160 
+ Right: 0x55fbaf74f1c0 
+ Father: 0x55fbaf74f1f0
+ code: 6
+ type: 2
+ value: 8.40779e-45"]
+"tree_node0x55fbaf74f160" [label = "Богданов 
+ Address: 0x55fbaf74f160
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f190
+ code: 1
+ type: 1
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74f1c0" [label = "Богданов 
+ Address: 0x55fbaf74f1c0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f190
+ code: 1
+ type: 1
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74f2b0" [label = "Помножен 
+ Address: 0x55fbaf74f2b0
+ Left: 0x55fbaf74f250 
+ Right: 0x55fbaf74f2e0 
+ Father: 0x55fbaf74f1f0
+ code: 6
+ type: 2
+ value: 8.40779e-45"]
+"tree_node0x55fbaf74f250" [label = "Помножен 
+ Address: 0x55fbaf74f250
+ Left: 0x55fbaf74f220 
+ Right: 0x55fbaf74f280 
+ Father: 0x55fbaf74f2b0
+ code: 6
+ type: 2
+ value: 8.40779e-45"]
+"tree_node0x55fbaf74f220" [label = "4 
+ Address: 0x55fbaf74f220
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f250
+ code: 0
+ type: 0
+ value: 4"]
+"tree_node0x55fbaf74f280" [label = "Архимед 
+ Address: 0x55fbaf74f280
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f250
+ code: 0
+ type: 1
+ value: 0"]
+"tree_node0x55fbaf74f2e0" [label = "Саранчин 
+ Address: 0x55fbaf74f2e0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f2b0
+ code: 2
+ type: 1
+ value: 2.8026e-45"]
+"tree_node0x55fbaf74f310" [label = "Блок-Узел 
+ Address: 0x55fbaf74f310
+ Left: 0x55fbaf74f340 
+ Right: 0x55fbaf74f580 
+ Father: 0x55fbaf74f0d0
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74f340" [label = "Если 
+ Address: 0x55fbaf74f340
+ Left: 0x55fbaf74f3a0 
+ Right: 0x55fbaf74f400 
+ Father: 0x55fbaf74f310
+ code: 0
+ type: 3
+ value: 0"]
+"tree_node0x55fbaf74f3a0" [label = "Равномощен 
+ Address: 0x55fbaf74f3a0
+ Left: 0x55fbaf74f370 
+ Right: 0x55fbaf74f3d0 
+ Father: 0x55fbaf74f340
+ code: 1
+ type: 2
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74f370" [label = "Дашков 
+ Address: 0x55fbaf74f370
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f3a0
+ code: 3
+ type: 1
+ value: 4.2039e-45"]
+"tree_node0x55fbaf74f3d0" [label = "0 
+ Address: 0x55fbaf74f3d0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f3a0
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74f400" [label = "Выписать 
+ Address: 0x55fbaf74f400
+ Left: (nil) 
+ Right: 0x55fbaf74f460 
+ Father: 0x55fbaf74f340
+ code: 3
+ type: 4
+ value: 4.2039e-45"]
+"tree_node0x55fbaf74f460" [label = "Минус 
+ Address: 0x55fbaf74f460
+ Left: 0x55fbaf74f430 
+ Right: 0x55fbaf74f4c0 
+ Father: 0x55fbaf74f400
+ code: 5
+ type: 2
+ value: 7.00649e-45"]
+"tree_node0x55fbaf74f430" [label = "0 
+ Address: 0x55fbaf74f430
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f460
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74f4c0" [label = "Поделен 
+ Address: 0x55fbaf74f4c0
+ Left: 0x55fbaf74f490 
+ Right: 0x55fbaf74f520 
+ Father: 0x55fbaf74f460
+ code: 7
+ type: 2
+ value: 9.80909e-45"]
+"tree_node0x55fbaf74f490" [label = "Богданов 
+ Address: 0x55fbaf74f490
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f4c0
+ code: 1
+ type: 1
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74f520" [label = "Помножен 
+ Address: 0x55fbaf74f520
+ Left: 0x55fbaf74f4f0 
+ Right: 0x55fbaf74f550 
+ Father: 0x55fbaf74f4c0
+ code: 6
+ type: 2
+ value: 8.40779e-45"]
+"tree_node0x55fbaf74f4f0" [label = "2 
+ Address: 0x55fbaf74f4f0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f520
+ code: 0
+ type: 0
+ value: 2"]
+"tree_node0x55fbaf74f550" [label = "Архимед 
+ Address: 0x55fbaf74f550
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f520
+ code: 0
+ type: 1
+ value: 0"]
+"tree_node0x55fbaf74f580" [label = "Блок-Узел 
+ Address: 0x55fbaf74f580
+ Left: 0x55fbaf74f5b0 
+ Right: 0x55fbaf74f6d0 
+ Father: 0x55fbaf74f310
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74f5b0" [label = "Если 
+ Address: 0x55fbaf74f5b0
+ Left: 0x55fbaf74f610 
+ Right: 0x55fbaf74f670 
+ Father: 0x55fbaf74f580
+ code: 0
+ type: 3
+ value: 0"]
+"tree_node0x55fbaf74f610" [label = "Равномощен 
+ Address: 0x55fbaf74f610
+ Left: 0x55fbaf74f5e0 
+ Right: 0x55fbaf74f640 
+ Father: 0x55fbaf74f5b0
+ code: 1
+ type: 2
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74f5e0" [label = "Дашков 
+ Address: 0x55fbaf74f5e0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f610
+ code: 3
+ type: 1
+ value: 4.2039e-45"]
+"tree_node0x55fbaf74f640" [label = "0 
+ Address: 0x55fbaf74f640
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f610
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74f670" [label = "Держи_Уд 
+ Address: 0x55fbaf74f670
+ Left: (nil) 
+ Right: 0x55fbaf74f6a0 
+ Father: 0x55fbaf74f5b0
+ code: 4
+ type: 4
+ value: 5.60519e-45"]
+"tree_node0x55fbaf74f6a0" [label = "3 
+ Address: 0x55fbaf74f6a0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f670
+ code: 0
+ type: 0
+ value: 3"]
+"tree_node0x55fbaf74f6d0" [label = "Блок-Узел 
+ Address: 0x55fbaf74f6d0
+ Left: 0x55fbaf74f700 
+ Right: 0x55fbaf74f820 
+ Father: 0x55fbaf74f580
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74f700" [label = "Если 
+ Address: 0x55fbaf74f700
+ Left: 0x55fbaf74f760 
+ Right: 0x55fbaf74f7c0 
+ Father: 0x55fbaf74f6d0
+ code: 0
+ type: 3
+ value: 0"]
+"tree_node0x55fbaf74f760" [label = "Меньше 
+ Address: 0x55fbaf74f760
+ Left: 0x55fbaf74f730 
+ Right: 0x55fbaf74f790 
+ Father: 0x55fbaf74f700
+ code: 3
+ type: 2
+ value: 4.2039e-45"]
+"tree_node0x55fbaf74f730" [label = "Дашков 
+ Address: 0x55fbaf74f730
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f760
+ code: 3
+ type: 1
+ value: 4.2039e-45"]
+"tree_node0x55fbaf74f790" [label = "0 
+ Address: 0x55fbaf74f790
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f760
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74f7c0" [label = "Выписать 
+ Address: 0x55fbaf74f7c0
+ Left: (nil) 
+ Right: 0x55fbaf74f7f0 
+ Father: 0x55fbaf74f700
+ code: 3
+ type: 4
+ value: 4.2039e-45"]
+"tree_node0x55fbaf74f7f0" [label = "-666.66 
+ Address: 0x55fbaf74f7f0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f7c0
+ code: 61
+ type: 0
+ value: -666.66"]
+"tree_node0x55fbaf74f820" [label = "Блок-Узел 
+ Address: 0x55fbaf74f820
+ Left: 0x55fbaf74f850 
+ Right: 0x55fbaf74f970 
+ Father: 0x55fbaf74f6d0
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74f850" [label = "Если 
+ Address: 0x55fbaf74f850
+ Left: 0x55fbaf74f8b0 
+ Right: 0x55fbaf74f910 
+ Father: 0x55fbaf74f820
+ code: 0
+ type: 3
+ value: 0"]
+"tree_node0x55fbaf74f8b0" [label = "Меньше 
+ Address: 0x55fbaf74f8b0
+ Left: 0x55fbaf74f880 
+ Right: 0x55fbaf74f8e0 
+ Father: 0x55fbaf74f850
+ code: 3
+ type: 2
+ value: 4.2039e-45"]
+"tree_node0x55fbaf74f880" [label = "Дашков 
+ Address: 0x55fbaf74f880
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f8b0
+ code: 3
+ type: 1
+ value: 4.2039e-45"]
+"tree_node0x55fbaf74f8e0" [label = "0 
+ Address: 0x55fbaf74f8e0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f8b0
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74f910" [label = "Держи_Уд 
+ Address: 0x55fbaf74f910
+ Left: (nil) 
+ Right: 0x55fbaf74f940 
+ Father: 0x55fbaf74f850
+ code: 4
+ type: 4
+ value: 5.60519e-45"]
+"tree_node0x55fbaf74f940" [label = "3 
+ Address: 0x55fbaf74f940
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f910
+ code: 0
+ type: 0
+ value: 3"]
+"tree_node0x55fbaf74f970" [label = "Блок-Узел 
+ Address: 0x55fbaf74f970
+ Left: 0x55fbaf74f9d0 
+ Right: 0x55fbaf74fa60 
+ Father: 0x55fbaf74f820
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74f9d0" [label = "ПревратилсяВ 
+ Address: 0x55fbaf74f9d0
+ Left: 0x55fbaf74f9a0 
+ Right: 0x55fbaf74fa00 
+ Father: 0x55fbaf74f970
+ code: 9
+ type: 2
+ value: 1.26117e-44"]
+"tree_node0x55fbaf74f9a0" [label = "Ассистент 
+ Address: 0x55fbaf74f9a0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74f9d0
+ code: 4
+ type: 1
+ value: 5.60519e-45"]
+"tree_node0x55fbaf74fa00" [label = "Корень 
+ Address: 0x55fbaf74fa00
+ Left: (nil) 
+ Right: 0x55fbaf74fa30 
+ Father: 0x55fbaf74f9d0
+ code: 6
+ type: 4
+ value: 8.40779e-45"]
+"tree_node0x55fbaf74fa30" [label = "Дашков 
+ Address: 0x55fbaf74fa30
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74fa00
+ code: 3
+ type: 1
+ value: 4.2039e-45"]
+"tree_node0x55fbaf74fa60" [label = "Блок-Узел 
+ Address: 0x55fbaf74fa60
+ Left: 0x55fbaf74fa90 
+ Right: 0x55fbaf74fc70 
+ Father: 0x55fbaf74f970
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74fa90" [label = "Выписать 
+ Address: 0x55fbaf74fa90
+ Left: (nil) 
+ Right: 0x55fbaf74fbb0 
+ Father: 0x55fbaf74fa60
+ code: 3
+ type: 4
+ value: 4.2039e-45"]
+"tree_node0x55fbaf74fbb0" [label = "Поделен 
+ Address: 0x55fbaf74fbb0
+ Left: 0x55fbaf74fb50 
+ Right: 0x55fbaf74fc10 
+ Father: 0x55fbaf74fa90
+ code: 7
+ type: 2
+ value: 9.80909e-45"]
+"tree_node0x55fbaf74fb50" [label = "Минус 
+ Address: 0x55fbaf74fb50
+ Left: 0x55fbaf74faf0 
+ Right: 0x55fbaf74fb80 
+ Father: 0x55fbaf74fbb0
+ code: 5
+ type: 2
+ value: 7.00649e-45"]
+"tree_node0x55fbaf74faf0" [label = "Минус 
+ Address: 0x55fbaf74faf0
+ Left: 0x55fbaf74fac0 
+ Right: 0x55fbaf74fb20 
+ Father: 0x55fbaf74fb50
+ code: 5
+ type: 2
+ value: 7.00649e-45"]
+"tree_node0x55fbaf74fac0" [label = "0 
+ Address: 0x55fbaf74fac0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74faf0
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74fb20" [label = "Богданов 
+ Address: 0x55fbaf74fb20
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74faf0
+ code: 1
+ type: 1
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74fb80" [label = "Ассистент 
+ Address: 0x55fbaf74fb80
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74fb50
+ code: 4
+ type: 1
+ value: 5.60519e-45"]
+"tree_node0x55fbaf74fc10" [label = "Помножен 
+ Address: 0x55fbaf74fc10
+ Left: 0x55fbaf74fbe0 
+ Right: 0x55fbaf74fc40 
+ Father: 0x55fbaf74fbb0
+ code: 6
+ type: 2
+ value: 8.40779e-45"]
+"tree_node0x55fbaf74fbe0" [label = "2 
+ Address: 0x55fbaf74fbe0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74fc10
+ code: 0
+ type: 0
+ value: 2"]
+"tree_node0x55fbaf74fc40" [label = "Архимед 
+ Address: 0x55fbaf74fc40
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74fc10
+ code: 0
+ type: 1
+ value: 0"]
+"tree_node0x55fbaf74fc70" [label = "Блок-Узел 
+ Address: 0x55fbaf74fc70
+ Left: 0x55fbaf74fca0 
+ Right: (nil) 
+ Father: 0x55fbaf74fa60
+ code: 0
+ type: 5
+ value: 0"]
+"tree_node0x55fbaf74fca0" [label = "Выписать 
+ Address: 0x55fbaf74fca0
+ Left: (nil) 
+ Right: 0x55fbaf74fdc0 
+ Father: 0x55fbaf74fc70
+ code: 3
+ type: 4
+ value: 4.2039e-45"]
+"tree_node0x55fbaf74fdc0" [label = "Поделен 
+ Address: 0x55fbaf74fdc0
+ Left: 0x55fbaf74fd60 
+ Right: 0x55fbaf74fe20 
+ Father: 0x55fbaf74fca0
+ code: 7
+ type: 2
+ value: 9.80909e-45"]
+"tree_node0x55fbaf74fd60" [label = "Плюс 
+ Address: 0x55fbaf74fd60
+ Left: 0x55fbaf74fd00 
+ Right: 0x55fbaf74fd90 
+ Father: 0x55fbaf74fdc0
+ code: 4
+ type: 2
+ value: 5.60519e-45"]
+"tree_node0x55fbaf74fd00" [label = "Минус 
+ Address: 0x55fbaf74fd00
+ Left: 0x55fbaf74fcd0 
+ Right: 0x55fbaf74fd30 
+ Father: 0x55fbaf74fd60
+ code: 5
+ type: 2
+ value: 7.00649e-45"]
+"tree_node0x55fbaf74fcd0" [label = "0 
+ Address: 0x55fbaf74fcd0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74fd00
+ code: 0
+ type: 0
+ value: 0"]
+"tree_node0x55fbaf74fd30" [label = "Богданов 
+ Address: 0x55fbaf74fd30
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74fd00
+ code: 1
+ type: 1
+ value: 1.4013e-45"]
+"tree_node0x55fbaf74fd90" [label = "Ассистент 
+ Address: 0x55fbaf74fd90
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74fd60
+ code: 4
+ type: 1
+ value: 5.60519e-45"]
+"tree_node0x55fbaf74fe20" [label = "Помножен 
+ Address: 0x55fbaf74fe20
+ Left: 0x55fbaf74fdf0 
+ Right: 0x55fbaf74fe50 
+ Father: 0x55fbaf74fdc0
+ code: 6
+ type: 2
+ value: 8.40779e-45"]
+"tree_node0x55fbaf74fdf0" [label = "2 
+ Address: 0x55fbaf74fdf0
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74fe20
+ code: 0
+ type: 0
+ value: 2"]
+"tree_node0x55fbaf74fe50" [label = "Архимед 
+ Address: 0x55fbaf74fe50
+ Left: (nil) 
+ Right: (nil) 
+ Father: 0x55fbaf74fe20
+ code: 0
+ type: 1
+ value: 0"]
+"tree_node0x55fbaf74bab0"
+"tree_node0x55fbaf74bab0" -> "tree_node0x55fbaf74bf90"
+"tree_node0x55fbaf74bf90" -> "tree_node0x55fbaf74bff0"
+"tree_node0x55fbaf74bf90" -> "tree_node0x55fbaf74c040"
+"tree_node0x55fbaf74c040" -> "tree_node0x55fbaf74c070"
+"tree_node0x55fbaf74c070" -> "tree_node0x55fbaf74df50"
+"tree_node0x55fbaf74df50" -> "tree_node0x55fbaf74df20"
+"tree_node0x55fbaf74df50" -> "tree_node0x55fbaf74df80"
+"tree_node0x55fbaf74c070" -> "tree_node0x55fbaf74dfb0"
+"tree_node0x55fbaf74dfb0" -> "tree_node0x55fbaf74dfe0"
+"tree_node0x55fbaf74c040" -> "tree_node0x55fbaf74e010"
+"tree_node0x55fbaf74e010" -> "tree_node0x55fbaf74e040"
+"tree_node0x55fbaf74e040" -> "tree_node0x55fbaf74e0a0"
+"tree_node0x55fbaf74e0a0" -> "tree_node0x55fbaf74e070"
+"tree_node0x55fbaf74e0a0" -> "tree_node0x55fbaf74e0d0"
+"tree_node0x55fbaf74e040" -> "tree_node0x55fbaf74e100"
+"tree_node0x55fbaf74e100" -> "tree_node0x55fbaf74e130"
+"tree_node0x55fbaf74bab0" -> "tree_node0x55fbaf74e160"
+"tree_node0x55fbaf74e160" -> "tree_node0x55fbaf74e190"
+"tree_node0x55fbaf74e190" -> "tree_node0x55fbaf74e1f0"
+"tree_node0x55fbaf74e1f0" -> "tree_node0x55fbaf74e240"
+"tree_node0x55fbaf74e190" -> "tree_node0x55fbaf74e290"
+"tree_node0x55fbaf74e290" -> "tree_node0x55fbaf74e2c0"
+"tree_node0x55fbaf74e2c0" -> "tree_node0x55fbaf74e320"
+"tree_node0x55fbaf74e320" -> "tree_node0x55fbaf74e2f0"
+"tree_node0x55fbaf74e320" -> "tree_node0x55fbaf74e350"
+"tree_node0x55fbaf74e2c0" -> "tree_node0x55fbaf74e380"
+"tree_node0x55fbaf74e380" -> "tree_node0x55fbaf74e3b0"
+"tree_node0x55fbaf74e3b0" -> "tree_node0x55fbaf74e3e0"
+"tree_node0x55fbaf74e3e0" -> "tree_node0x55fbaf74e410"
+"tree_node0x55fbaf74e290" -> "tree_node0x55fbaf74e440"
+"tree_node0x55fbaf74e440" -> "tree_node0x55fbaf74e470"
+"tree_node0x55fbaf74e470" -> "tree_node0x55fbaf74e4d0"
+"tree_node0x55fbaf74e4d0" -> "tree_node0x55fbaf74e4a0"
+"tree_node0x55fbaf74e4d0" -> "tree_node0x55fbaf74e500"
+"tree_node0x55fbaf74e470" -> "tree_node0x55fbaf74e530"
+"tree_node0x55fbaf74e530" -> "tree_node0x55fbaf74e590"
+"tree_node0x55fbaf74e590" -> "tree_node0x55fbaf74e560"
+"tree_node0x55fbaf74e590" -> "tree_node0x55fbaf74e5c0"
+"tree_node0x55fbaf74e530" -> "tree_node0x55fbaf74e5f0"
+"tree_node0x55fbaf74e5f0" -> "tree_node0x55fbaf74e620"
+"tree_node0x55fbaf74e440" -> "tree_node0x55fbaf74e650"
+"tree_node0x55fbaf74e650" -> "tree_node0x55fbaf74e680"
+"tree_node0x55fbaf74e680" -> "tree_node0x55fbaf74e6e0"
+"tree_node0x55fbaf74e6e0" -> "tree_node0x55fbaf74e6b0"
+"tree_node0x55fbaf74e6e0" -> "tree_node0x55fbaf74e710"
+"tree_node0x55fbaf74e680" -> "tree_node0x55fbaf74e740"
+"tree_node0x55fbaf74e740" -> "tree_node0x55fbaf74e7a0"
+"tree_node0x55fbaf74e7a0" -> "tree_node0x55fbaf74e770"
+"tree_node0x55fbaf74e7a0" -> "tree_node0x55fbaf74e7d0"
+"tree_node0x55fbaf74e740" -> "tree_node0x55fbaf74e800"
+"tree_node0x55fbaf74e800" -> "tree_node0x55fbaf74e8c0"
+"tree_node0x55fbaf74e8c0" -> "tree_node0x55fbaf74e860"
+"tree_node0x55fbaf74e860" -> "tree_node0x55fbaf74e830"
+"tree_node0x55fbaf74e860" -> "tree_node0x55fbaf74e890"
+"tree_node0x55fbaf74e8c0" -> "tree_node0x55fbaf74e8f0"
+"tree_node0x55fbaf74e160" -> "tree_node0x55fbaf74e920"
+"tree_node0x55fbaf74e920" -> "tree_node0x55fbaf74e980"
+"tree_node0x55fbaf74e980" -> "tree_node0x55fbaf74e9b0"
+"tree_node0x55fbaf74e9b0" -> "tree_node0x55fbaf74ea10"
+"tree_node0x55fbaf74ea10" -> "tree_node0x55fbaf74e9e0"
+"tree_node0x55fbaf74ea10" -> "tree_node0x55fbaf74ea40"
+"tree_node0x55fbaf74e9b0" -> "tree_node0x55fbaf74ea70"
+"tree_node0x55fbaf74ea70" -> "tree_node0x55fbaf74ead0"
+"tree_node0x55fbaf74ead0" -> "tree_node0x55fbaf74eaa0"
+"tree_node0x55fbaf74ead0" -> "tree_node0x55fbaf74eb00"
+"tree_node0x55fbaf74ea70" -> "tree_node0x55fbaf74eb30"
+"tree_node0x55fbaf74eb30" -> "tree_node0x55fbaf74eb90"
+"tree_node0x55fbaf74eb90" -> "tree_node0x55fbaf74eb60"
+"tree_node0x55fbaf74eb90" -> "tree_node0x55fbaf74ebc0"
+"tree_node0x55fbaf74eb30" -> "tree_node0x55fbaf74ebf0"
+"tree_node0x55fbaf74ebf0" -> "tree_node0x55fbaf74ec20"
+"tree_node0x55fbaf74ec20" -> "tree_node0x55fbaf74ec80"
+"tree_node0x55fbaf74ec80" -> "tree_node0x55fbaf74ec50"
+"tree_node0x55fbaf74ec80" -> "tree_node0x55fbaf74ecb0"
+"tree_node0x55fbaf74ec20" -> "tree_node0x55fbaf74ed10"
+"tree_node0x55fbaf74ed10" -> "tree_node0x55fbaf74ece0"
+"tree_node0x55fbaf74ed10" -> "tree_node0x55fbaf74ed40"
+"tree_node0x55fbaf74ed40" -> "tree_node0x55fbaf74ed70"
+"tree_node0x55fbaf74ed70" -> "tree_node0x55fbaf74eda0"
+"tree_node0x55fbaf74ed70" -> "tree_node0x55fbaf74edd0"
+"tree_node0x55fbaf74edd0" -> "tree_node0x55fbaf74ee00"
+"tree_node0x55fbaf74ebf0" -> "tree_node0x55fbaf74ee30"
+"tree_node0x55fbaf74ee30" -> "tree_node0x55fbaf74ee60"
+"tree_node0x55fbaf74ee60" -> "tree_node0x55fbaf74eec0"
+"tree_node0x55fbaf74eec0" -> "tree_node0x55fbaf74ee90"
+"tree_node0x55fbaf74eec0" -> "tree_node0x55fbaf74eef0"
+"tree_node0x55fbaf74ee60" -> "tree_node0x55fbaf74ef20"
+"tree_node0x55fbaf74ef20" -> "tree_node0x55fbaf74ef50"
+"tree_node0x55fbaf74ee30" -> "tree_node0x55fbaf74ef80"
+"tree_node0x55fbaf74ef80" -> "tree_node0x55fbaf74efb0"
+"tree_node0x55fbaf74efb0" -> "tree_node0x55fbaf74f010"
+"tree_node0x55fbaf74f010" -> "tree_node0x55fbaf74efe0"
+"tree_node0x55fbaf74f010" -> "tree_node0x55fbaf74f040"
+"tree_node0x55fbaf74efb0" -> "tree_node0x55fbaf74f070"
+"tree_node0x55fbaf74f070" -> "tree_node0x55fbaf74f0a0"
+"tree_node0x55fbaf74ef80" -> "tree_node0x55fbaf74f0d0"
+"tree_node0x55fbaf74f0d0" -> "tree_node0x55fbaf74f130"
+"tree_node0x55fbaf74f130" -> "tree_node0x55fbaf74f100"
+"tree_node0x55fbaf74f130" -> "tree_node0x55fbaf74f1f0"
+"tree_node0x55fbaf74f1f0" -> "tree_node0x55fbaf74f190"
+"tree_node0x55fbaf74f190" -> "tree_node0x55fbaf74f160"
+"tree_node0x55fbaf74f190" -> "tree_node0x55fbaf74f1c0"
+"tree_node0x55fbaf74f1f0" -> "tree_node0x55fbaf74f2b0"
+"tree_node0x55fbaf74f2b0" -> "tree_node0x55fbaf74f250"
+"tree_node0x55fbaf74f250" -> "tree_node0x55fbaf74f220"
+"tree_node0x55fbaf74f250" -> "tree_node0x55fbaf74f280"
+"tree_node0x55fbaf74f2b0" -> "tree_node0x55fbaf74f2e0"
+"tree_node0x55fbaf74f0d0" -> "tree_node0x55fbaf74f310"
+"tree_node0x55fbaf74f310" -> "tree_node0x55fbaf74f340"
+"tree_node0x55fbaf74f340" -> "tree_node0x55fbaf74f3a0"
+"tree_node0x55fbaf74f3a0" -> "tree_node0x55fbaf74f370"
+"tree_node0x55fbaf74f3a0" -> "tree_node0x55fbaf74f3d0"
+"tree_node0x55fbaf74f340" -> "tree_node0x55fbaf74f400"
+"tree_node0x55fbaf74f400" -> "tree_node0x55fbaf74f460"
+"tree_node0x55fbaf74f460" -> "tree_node0x55fbaf74f430"
+"tree_node0x55fbaf74f460" -> "tree_node0x55fbaf74f4c0"
+"tree_node0x55fbaf74f4c0" -> "tree_node0x55fbaf74f490"
+"tree_node0x55fbaf74f4c0" -> "tree_node0x55fbaf74f520"
+"tree_node0x55fbaf74f520" -> "tree_node0x55fbaf74f4f0"
+"tree_node0x55fbaf74f520" -> "tree_node0x55fbaf74f550"
+"tree_node0x55fbaf74f310" -> "tree_node0x55fbaf74f580"
+"tree_node0x55fbaf74f580" -> "tree_node0x55fbaf74f5b0"
+"tree_node0x55fbaf74f5b0" -> "tree_node0x55fbaf74f610"
+"tree_node0x55fbaf74f610" -> "tree_node0x55fbaf74f5e0"
+"tree_node0x55fbaf74f610" -> "tree_node0x55fbaf74f640"
+"tree_node0x55fbaf74f5b0" -> "tree_node0x55fbaf74f670"
+"tree_node0x55fbaf74f670" -> "tree_node0x55fbaf74f6a0"
+"tree_node0x55fbaf74f580" -> "tree_node0x55fbaf74f6d0"
+"tree_node0x55fbaf74f6d0" -> "tree_node0x55fbaf74f700"
+"tree_node0x55fbaf74f700" -> "tree_node0x55fbaf74f760"
+"tree_node0x55fbaf74f760" -> "tree_node0x55fbaf74f730"
+"tree_node0x55fbaf74f760" -> "tree_node0x55fbaf74f790"
+"tree_node0x55fbaf74f700" -> "tree_node0x55fbaf74f7c0"
+"tree_node0x55fbaf74f7c0" -> "tree_node0x55fbaf74f7f0"
+"tree_node0x55fbaf74f6d0" -> "tree_node0x55fbaf74f820"
+"tree_node0x55fbaf74f820" -> "tree_node0x55fbaf74f850"
+"tree_node0x55fbaf74f850" -> "tree_node0x55fbaf74f8b0"
+"tree_node0x55fbaf74f8b0" -> "tree_node0x55fbaf74f880"
+"tree_node0x55fbaf74f8b0" -> "tree_node0x55fbaf74f8e0"
+"tree_node0x55fbaf74f850" -> "tree_node0x55fbaf74f910"
+"tree_node0x55fbaf74f910" -> "tree_node0x55fbaf74f940"
+"tree_node0x55fbaf74f820" -> "tree_node0x55fbaf74f970"
+"tree_node0x55fbaf74f970" -> "tree_node0x55fbaf74f9d0"
+"tree_node0x55fbaf74f9d0" -> "tree_node0x55fbaf74f9a0"
+"tree_node0x55fbaf74f9d0" -> "tree_node0x55fbaf74fa00"
+"tree_node0x55fbaf74fa00" -> "tree_node0x55fbaf74fa30"
+"tree_node0x55fbaf74f970" -> "tree_node0x55fbaf74fa60"
+"tree_node0x55fbaf74fa60" -> "tree_node0x55fbaf74fa90"
+"tree_node0x55fbaf74fa90" -> "tree_node0x55fbaf74fbb0"
+"tree_node0x55fbaf74fbb0" -> "tree_node0x55fbaf74fb50"
+"tree_node0x55fbaf74fb50" -> "tree_node0x55fbaf74faf0"
+"tree_node0x55fbaf74faf0" -> "tree_node0x55fbaf74fac0"
+"tree_node0x55fbaf74faf0" -> "tree_node0x55fbaf74fb20"
+"tree_node0x55fbaf74fb50" -> "tree_node0x55fbaf74fb80"
+"tree_node0x55fbaf74fbb0" -> "tree_node0x55fbaf74fc10"
+"tree_node0x55fbaf74fc10" -> "tree_node0x55fbaf74fbe0"
+"tree_node0x55fbaf74fc10" -> "tree_node0x55fbaf74fc40"
+"tree_node0x55fbaf74fa60" -> "tree_node0x55fbaf74fc70"
+"tree_node0x55fbaf74fc70" -> "tree_node0x55fbaf74fca0"
+"tree_node0x55fbaf74fca0" -> "tree_node0x55fbaf74fdc0"
+"tree_node0x55fbaf74fdc0" -> "tree_node0x55fbaf74fd60"
+"tree_node0x55fbaf74fd60" -> "tree_node0x55fbaf74fd00"
+"tree_node0x55fbaf74fd00" -> "tree_node0x55fbaf74fcd0"
+"tree_node0x55fbaf74fd00" -> "tree_node0x55fbaf74fd30"
+"tree_node0x55fbaf74fd60" -> "tree_node0x55fbaf74fd90"
+"tree_node0x55fbaf74fdc0" -> "tree_node0x55fbaf74fe20"
+"tree_node0x55fbaf74fe20" -> "tree_node0x55fbaf74fdf0"
+"tree_node0x55fbaf74fe20" -> "tree_node0x55fbaf74fe50"
+
+}

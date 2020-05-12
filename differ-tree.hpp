@@ -7,10 +7,10 @@
 #include "unary_functions.hpp"
 #include "cond_operators.hpp"
 
-static const float EPSILON    = 0.0001;
+static const double EPSILON    = 0.0001;
 static const int   BUFSIZE    = 512;
 
-bool equal (float a, float b)
+bool equal (double a, double b)
 {
     return fabs (a - b) < EPSILON;
 }
@@ -229,9 +229,9 @@ class CalcTree: public Tree_t <informative_value>
 
     Node_t* Get_N (char *&input)
     {
-        float value = 0.0;
+        double value = 0.0;
         int read_count = 0;
-        if ( ! sscanf (input, "%f%n", &value, &read_count) )
+        if ( ! sscanf (input, "%lf%n", &value, &read_count) )
         {
             assert (false);
         }
@@ -262,7 +262,7 @@ public:
 
     }
 
-    void part_insert_var (Node_t *node, const char &variable, const float &var_value, long &counter)
+    void part_insert_var (Node_t *node, const char &variable, const double &var_value, long &counter)
     {
         assert (node);
         if ( node -> node_data.data.code == variable && node -> node_data.type == VARIABLE ) 
@@ -280,21 +280,21 @@ public:
 
 public:
 
-    long insert_variable (const char variable, const float var_value)
+    long insert_variable (const char variable, const double var_value)
     {   
         long counter = 0;
         part_insert_var (head, variable, var_value, counter);
         return counter;
     }
 
-    OPE::ERR calculate ( Node_t *node, float &result )
+    OPE::ERR calculate ( Node_t *node, double &result )
     {
         if ( has_variable )
             return OPE::HAS_VARIABLE;
         if ( node -> node_data.type == QUANTITY )
             result = node -> node_data.data.value;
-        float a = 0;
-        float b = 0;
+        double a = 0;
+        double b = 0;
 
         if (node -> left)
             calculate (node -> left, a);

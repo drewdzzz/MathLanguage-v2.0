@@ -12,6 +12,8 @@ void asm_un_function (FILE* stream, CalcTree::Node_t *node);
 
 bool return_value = false;
 
+int ARYPHM_LABLES = 0;
+
 void write_to_asm (const CalcTree &code)
 {
     FILE* stream = fopen (OUTPUT_CODE, "w");
@@ -21,14 +23,15 @@ void write_to_asm (const CalcTree &code)
     fprintf (stream, ";==========INCLUDE DREW LIB==========\n\n"
                      "segment .data\n"
                      "BUFFER_SIZE equ 100\n"
-                     "buffer times BUFFER_SIZE db 0\n\n"
+                     "buffer times BUFFER_SIZE db 0\n"
+                     "new_line db 0x0a\n"
                      );
 
     fprintf (stream, "segment .text\n\n");
 
     fprintf (stream,";==============================================================\n"
                     ";Entry:		    requires buffer and const BUFFER_SIZE\n"
-                    ";				R8D	- int value\n"
+                    ";				R8	- long long value\n"
                     ";Exit: 		    RDX - length of buffer\n"
                     ";				RSI - ptr to number in buffer\n"
                     ";				ES  = DS\n"
@@ -39,26 +42,26 @@ void write_to_asm (const CalcTree &code)
                     "\tmov rsi, buffer\n"
                     "\tadd rsi, BUFFER_SIZE\n"
                     "\txor r10b, r10b\n"
-                    "\tmov r9d, 10\n"
-                    "\tmov rcx, 9\n"
-                    "\tmov eax, r8d\n"
+                    "\tmov r9, 10\n"
+                    "\tmov rcx, 19\n"
+                    "\tmov rax, r8\n"
                     "\n"
                     "\t.dec_format_loop:\n"
                     "\tdec rsi\n"
                     "\tinc r10b\n"
                     "\n" 
-                    "\txor edx, edx\n"
-                    "\tdiv r9d\n"
+                    "\txor rdx, rdx\n"
+                    "\tdiv r9\n"
                     "\n"
-                    "\tadd edx, '0'\n"
+                    "\tadd rdx, '0'\n"
                     "\tmov [rsi], dl \n"
                     "\tLOOP .dec_format_loop\n"
                     "\n"
                     "\txor rdx, rdx\n"
                     "\tmov dl, r10b\n"
                     "\n"
-                    "\tmov eax, ds\n"
-                    "\tmov es, eax\n"
+                    "\tmov rax, ds\n"
+                    "\tmov es, rax\n"
                     "\tmov al, '0'\n"
                     "\tmov rcx, rdx\n"
                     "\tdec rcx\n"
@@ -72,10 +75,43 @@ void write_to_asm (const CalcTree &code)
                     "\tret\n\n\n"
 
                     "PRINT:\n"
+                    "\txor rax, rax\n"
+                    "\tcmp r8, rax\n"
+                    "\tjge POSITIVE\n"
+                    "\n"
+                    "\tmov rsi, buffer\n"
+                    "\tmov rdx, 1\n"
+                    "\tmov byte [rsi], '-'\n"
+                    "\txor rax, rax\n"
+                    "\tinc rax\n"
+                    "\txor rdi, rdi\n"
+                    "\tsyscall\n"
+                    "\n"
+                    "\tneg r8\n"
+                    "POSITIVE:\n"
+                    "\tpush r8\n"
+                    "\tshr r8, 10\n"
                     "\tcall dec_format\n"
                     "\txor rax, rax\n"
                     "\tinc rax\n"
                     "\txor rdi, rdi\n"
+                    "\tsyscall\n"
+                    "\tpop r8\n"
+                    "\n"
+                    "\tmov rsi, buffer\n"
+                    "\tmov rdx, 1\n"
+                    "\tmov byte [rsi], '.'\n"
+                    "\txor rax, rax\n"
+                    "\tinc rax\n"
+                    "\txor rdi, rdi\n"
+                    "\tsyscall\n"
+                    "\n"
+                    "\tand r8, 0x3FF\n"
+                    "\tcall dec_format\n"
+                    "\txor rax, rax\n"
+                    "\tinc rax\n"
+                    "\txor rdi, rdi\n"
+                    "\tinc rdx\n"
                     "\tsyscall\n"
                     "\tret\n\n\n"
                     
@@ -137,6 +173,33 @@ void write_to_asm (const CalcTree &code)
                     "\tmov rsi, buffer\n"
                     "\tcall toInt\n"
                     "\tret\n"
+                    "\n"
+                    "\n"
+                    "\n"
+                    "SQRT: \n"
+                    "\tshr rax, 10\n"
+                    "\txor ebx, ebx\n"
+                    "\tbsr ecx, eax\n"
+                    "\tand cl, 0feh\n"
+                    "\tmov edx, 1\n"
+                    "\tshl edx, cl\n"
+                    ".refine:\n"
+                    "\tmov esi, ebx\n"
+                    "\tadd esi, edx\n"
+                    "\tcmp esi, eax\n"
+                    "\tja .@f\n"
+                    "\tsub eax, esi\n"
+                    "\tshr ebx, 1\n"
+                    "\tadd ebx, edx\n"
+                    "\tjmp .next\n"
+                    ".@f:\n"
+                    "\tshr ebx, 1\n"
+                    ".next :\n"
+                    "\tshr edx, 2\n"
+                    "\tjnz .refine\n"
+                    "\tmov eax, ebx\n"
+                    "\tshl rax, 10\n"
+                    "\tret\n"
                     ";==========INCLUDE DREW LIB==========\n\n");
 
     fprintf (stream,"\nglobal _start\n_start:\n");
@@ -163,7 +226,8 @@ void asm_undertree (FILE* stream, CalcTree::Node_t *node)
 
         case QUANTITY:
 
-            fprintf (stream, "\tpush %g\n", node -> node_data.data.value);
+            fprintf (stream, "\tmov r10, %lld\t\t\t\t\t\t\t\t;Actual value: %lf\n", static_cast<long long> (node -> node_data.data.value * 1024), node -> node_data.data.value);
+            fprintf (stream, "\tpush r10\n");
             break;
 
         case BLOCK:
@@ -224,6 +288,7 @@ void asm_undertree (FILE* stream, CalcTree::Node_t *node)
                 fprintf (stream, "\tpop r8\n");
             if (return_value)
                 fprintf (stream, "\tpush rax\n");
+                return_value = false;
             break;
         }
 
@@ -272,15 +337,18 @@ void asm_operator (FILE* stream, CalcTree::Node_t *node)
         return;
     }
 
-    if (is_this_operator (code, DIV))
+    if (is_this_operator (code, DIV)) //ПОКА ЧТО ТОЛЬКО ЦЕЛОЧИСЛЕННЫЙ ОТВЕТ
     {
         asm_undertree (stream, node -> left);
         asm_undertree (stream, node -> right);
-        fprintf (stream, "\tpop rdx\n");
+        fprintf (stream, "\tpop r8\n");
+        fprintf (stream, "\txor rdx, rdx\n");
         fprintf (stream, "\tpop rax\n");
-        fprintf (stream, "\tdiv rdx\n");
-        fprintf (stream, "\tpush rax\n");
-
+        fprintf (stream, "\tidiv r8\n");
+        fprintf (stream, "\txor rdx, rdx\n");
+        fprintf (stream, "\tmov r8, 1024\n"
+                         "\timul r8\n");
+        fprintf (stream, "\tpush rax\n");       
         return;
     }
 
@@ -289,8 +357,11 @@ void asm_operator (FILE* stream, CalcTree::Node_t *node)
         asm_undertree (stream, node -> left);
         asm_undertree (stream, node -> right);
         fprintf (stream, "\tpop rax\n");
-        fprintf (stream, "\tpop rdx\n");
-        fprintf (stream, "\tmul rdx\n");
+        fprintf (stream, "\tpop rcx\n");
+        fprintf (stream, "\timul rcx\n");
+        fprintf (stream, "\tshr rax, 10\n");
+        fprintf (stream, "\tshl rdx, 54\n");
+        fprintf (stream, "\tor rax, rdx\n");
         fprintf (stream, "\tpush rax\n");
         return;
     }
@@ -350,7 +421,7 @@ void asm_operator (FILE* stream, CalcTree::Node_t *node)
                         "\tpop r10\t\t\t\t\t\t\t\t;Conditional operator - a < b\n"
                         "\tpop r11\n"
                         "\tcmp r11, r10\n"
-                        "\tjb COND_T%d\n"
+                        "\tjl COND_T%d\n"
                         "\tpush 0\n"
                         "\tjmp COND_F%d\n"
                         "COND_T%d:\n"
@@ -368,7 +439,7 @@ void asm_operator (FILE* stream, CalcTree::Node_t *node)
                         "\tpop r10\t\t\t\t\t\t\t\t;Conditional operator - a > b\n"
                         "\tpop r11\n"
                         "\tcmp r11, r10\n"
-                        "\tja COND_T%d\n"
+                        "\tjg COND_T%d\n"
                         "\tpush 0\n"
                         "\tjmp COND_F%d\n"
                         "COND_T%d:\n"
@@ -415,14 +486,16 @@ void asm_un_function (FILE* stream, CalcTree::Node_t *node)
         asm_undertree (stream, node->right);
         fprintf (stream, "SIN\n" );
         return;
-    }
+    }*/
     
     else if ( is_this_un_func (node->node_data.data.code, SQRT) )
     {
         asm_undertree (stream, node->right);
-        fprintf (stream, "\tSQRT :: OF COURSE YOU NEED TO DEAL WITH IT\n" );
+        fprintf (stream, "\tpop rax\n"
+                         "\tcall SQRT\n"
+                         "push rax\n");
         return;
-    }*/
+    }
     else if ( is_this_un_func (node->node_data.data.code, RETURN) )
     {
         asm_undertree (stream, node->right);

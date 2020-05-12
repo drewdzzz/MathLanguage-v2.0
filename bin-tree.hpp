@@ -31,7 +31,7 @@ struct informative_value
 {
     union
     {
-        float value;
+        double value;
         char code;
     }data;
     
@@ -49,7 +49,7 @@ struct informative_value
         type (0)
     {};
     
-    informative_value (float value):
+    informative_value (double value):
         data ({}),
         type (0)
     {
@@ -89,7 +89,7 @@ public:
             node_data ({})
         {};
 
-        Node_t (float value):                                
+        Node_t (double value):                                
             right (nullptr),
             left (nullptr),
             father (nullptr),

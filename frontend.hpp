@@ -799,9 +799,9 @@ Node* Get_F (char *&input, int func_num)
 Node* Get_N (char *&input)
 {
     kill_spaces (input);
-    float value = 0.0;
+    double value = 0.0;
     int read_count = 0;
-    if ( ! sscanf (input, "%f%n", &value, &read_count) )
+    if ( ! sscanf (input, "%lf%n", &value, &read_count) )
     {
         assert (false);
     }

@@ -58,7 +58,7 @@ char get_operator_code (const char* op)
     return 0;
 }
 
-OPE::ERR use_operator (float a, float b, char op_code, float &res)
+OPE::ERR use_operator (double a, double b, char op_code, double &res)
 {
     
         if ( ! strcmp ( operators[op_code], ADD ) )

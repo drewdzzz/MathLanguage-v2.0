@@ -56,7 +56,7 @@ char* get_un_func_by_code (char code)
     return res;
 }
 
-float use_un_func (char func_code, float value)
+double use_un_func (char func_code, double value)
 {
 
     if ( is_this_un_func (func_code, SIN) )

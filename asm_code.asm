@@ -55,7 +55,7 @@ segment .text
 PRINT:
 	xor rax, rax
 	cmp r8, rax
-	jge POSITIVE
+	jge .positive
 
 	mov rsi, buffer
 	mov rdx, 1
@@ -66,7 +66,7 @@ PRINT:
 	syscall
 
 	neg r8
-POSITIVE:
+.positive:
 	push r8
 	shr r8, 10
 	call dec_format
@@ -85,6 +85,12 @@ POSITIVE:
 	syscall
 
 	and r8, 0x3FF
+	shl r8, 10
+	mov rax, r8
+	cqo
+	mov r8, 1000
+	idiv r8
+	mov r8, rax
 	call dec_format
 	xor rax, rax
 	inc rax
@@ -122,6 +128,8 @@ gets:
 
 	ret
 
+
+
 toInt:
 	xor r8, r8
 	mov rdi, rsi
@@ -131,6 +139,8 @@ toInt:
 
 .loop:
 	dec rdi
+	cmp byte [rdi], '-'
+	je .end
 	mov bl, [rdi]
 	sub bl, '0'
 	mov rax, rcx
@@ -141,6 +151,15 @@ toInt:
 	mov rcx, rax
 	cmp rdi, rsi
 	jne .loop
+.end:
+	cmp byte [rdi], '-'
+	jne .positive
+	shl r8, 10
+	neg r8
+	jmp .neg_end
+.positive:
+	shl r8, 10
+.neg_end:
 	mov rax, r8
 	ret
 
@@ -155,28 +174,27 @@ SCAN:
 
 
 SQRT: 
-	shr rax, 10
-	xor ebx, ebx
-	bsr ecx, eax
-	and cl, 0feh
-	mov edx, 1
-	shl edx, cl
+	xor rbx, rbx
+	bsr rcx, rax
+	and cl,  0x0fe
+	mov rdx, 1
+	shl rdx, cl
 .refine:
-	mov esi, ebx
-	add esi, edx
-	cmp esi, eax
+	mov rsi, rbx
+	add rsi, rdx
+	cmp rsi, rax
 	ja .@f
-	sub eax, esi
-	shr ebx, 1
-	add ebx, edx
+	sub rax, rsi
+	shr rbx, 1
+	add rbx, rdx
 	jmp .next
 .@f:
-	shr ebx, 1
+	shr rbx, 1
 .next :
-	shr edx, 2
+	shr rdx, 2
 	jnz .refine
-	mov eax, ebx
-	shl rax, 10
+	mov rax, rbx
+	shl rax, 5
 	ret
 ;==========INCLUDE DREW LIB==========
 
@@ -215,7 +233,7 @@ COND_F2:
 	xor r11, r11
 	cmp r10, r11
 	je COND_F1
-	mov r10, -682659								;Actual value: -666.660000
+	mov r10, -681984								;Actual value: -666.000000
 	push r10
 	pop rax
 	pop rbp
@@ -239,7 +257,7 @@ COND_F4:
 	xor r11, r11
 	cmp r10, r11
 	je COND_F3
-	mov r10, 910213								;Actual value: 888.880000
+	mov r10, 909312								;Actual value: 888.000000
 	push r10
 	pop rax
 	pop rbp
@@ -367,12 +385,19 @@ COND_F14:
 	push r11
 	push qword [rbp + 16 + 8*0]
 	pop r8
-	xor rdx, rdx
 	pop rax
+	cqo
 	idiv r8
+	mov r9, rdx
 	xor rdx, rdx
-	mov r8, 1024
-	imul r8
+	mov r10, 1024
+	imul r10
+	mov r11, rax
+	mov rax, r9
+	shr r8, 10
+	cqo
+	idiv r8
+	add rax, r11
 	push rax
 	pop rax
 	pop rbp
@@ -385,15 +410,12 @@ COND_F11:
 MAIN:
 	push rbp
 	mov rbp, rsp
-	mov r10, 1024								;Actual value: 1.000000
-	push r10
-	pop qword [rbp + 16 + 8*0]
-	mov r10, -2048								;Actual value: -2.000000
-	push r10
-	pop qword [rbp + 16 + 8*1]
-	mov r10, 1024								;Actual value: 1.000000
-	push r10
-	pop qword [rbp + 16 + 8*2]
+	call SCAN								; function INPUT
+	mov qword [rbp + 16 + 8*0], rax
+	call SCAN								; function INPUT
+	mov qword [rbp + 16 + 8*1], rax
+	call SCAN								; function INPUT
+	mov qword [rbp + 16 + 8*2], rax
 push qword [rbp + 16 + 8*0]
 	mov r10, 0								;Actual value: 0.000000
 	push r10
@@ -440,9 +462,7 @@ COND_F18:
 	cmp r10, r11
 	je COND_F17
 push qword [rbp + 16 + 8*4]
-	
-pop r8
-								; PRINT function
+	pop r8								; PRINT function
 	call PRINT
 
 COND_F17:
@@ -538,48 +558,24 @@ push qword [rbp + 16 + 8*0]
 	or rax, rdx
 	push rax
 	pop r8
-	xor rdx, rdx
 	pop rax
+	cqo
 	idiv r8
+	mov r9, rdx
 	xor rdx, rdx
-	mov r8, 1024
-	imul r8
+	mov r10, 1024
+	imul r10
+	mov r11, rax
+	mov rax, r9
+	shr r8, 10
+	cqo
+	idiv r8
+	add rax, r11
 	push rax
-	
-pop r8
-								; PRINT function
+	pop r8								; PRINT function
 	call PRINT
 
 COND_F21:
-	mov r10, 0								;Actual value: 0.000000
-	push r10
-push qword [rbp + 16 + 8*1]
-	pop r10
-	pop r11
-	sub r11, r10
-	push r11
-	
-pop r8
-								; PRINT function
-	call PRINT
-
-	mov r10, 2048								;Actual value: 2.000000
-	push r10
-	mov r10, 2048								;Actual value: 2.000000
-	push r10
-	pop r8
-	xor rdx, rdx
-	pop rax
-	idiv r8
-	xor rdx, rdx
-	mov r8, 1024
-	imul r8
-	push rax
-	
-pop r8
-								; PRINT function
-	call PRINT
-
 push qword [rbp + 16 + 8*3]
 	mov r10, 0								;Actual value: 0.000000
 	push r10
@@ -622,11 +618,9 @@ COND_F26:
 	xor r11, r11
 	cmp r10, r11
 	je COND_F25
-	mov r10, -682659								;Actual value: -666.660000
+	mov r10, -681984								;Actual value: -666.000000
 	push r10
-	
-pop r8
-								; PRINT function
+	pop r8								; PRINT function
 	call PRINT
 
 COND_F25:
@@ -657,7 +651,7 @@ COND_F27:
 push qword [rbp + 16 + 8*3]
 	pop rax
 	call SQRT
-push rax
+	push rax
 	pop qword [rbp + 16 + 8*4]
 	mov r10, 0								;Actual value: 0.000000
 	push r10
@@ -682,16 +676,21 @@ push qword [rbp + 16 + 8*0]
 	or rax, rdx
 	push rax
 	pop r8
-	xor rdx, rdx
 	pop rax
+	cqo
 	idiv r8
+	mov r9, rdx
 	xor rdx, rdx
-	mov r8, 1024
-	imul r8
+	mov r10, 1024
+	imul r10
+	mov r11, rax
+	mov rax, r9
+	shr r8, 10
+	cqo
+	idiv r8
+	add rax, r11
 	push rax
-	
-pop r8
-								; PRINT function
+	pop r8								; PRINT function
 	call PRINT
 
 	mov r10, 0								;Actual value: 0.000000
@@ -717,16 +716,21 @@ push qword [rbp + 16 + 8*0]
 	or rax, rdx
 	push rax
 	pop r8
-	xor rdx, rdx
 	pop rax
+	cqo
 	idiv r8
+	mov r9, rdx
 	xor rdx, rdx
-	mov r8, 1024
-	imul r8
+	mov r10, 1024
+	imul r10
+	mov r11, rax
+	mov rax, r9
+	shr r8, 10
+	cqo
+	idiv r8
+	add rax, r11
 	push rax
-	
-pop r8
-								; PRINT function
+	pop r8								; PRINT function
 	call PRINT
 
 

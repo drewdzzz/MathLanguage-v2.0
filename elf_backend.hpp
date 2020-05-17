@@ -1,24 +1,39 @@
+#include <vector>
 #include "differ-tree.hpp"
+#include "nasm_commands.hpp"
+#include "elf_header.hpp"
 
-void asm_operator (FILE* stream, CalcTree::Node_t *node);
 
-void asm_cond_operator (FILE* stream, CalcTree::Node_t *node);
+void elf_operator (FILE* stream, CalcTree::Node_t *node);
 
-void write_to_asm (const CalcTree &code);
+void elf_cond_operator (FILE* stream, CalcTree::Node_t *node);
 
-void asm_undertree (FILE* stream, CalcTree::Node_t *node);
+void write_to_elf (const CalcTree &code);
 
-void asm_un_function (FILE* stream, CalcTree::Node_t *node);
+void elf_undertree (FILE* stream, CalcTree::Node_t *node);
 
-bool return_value = false;
+void elf_un_function (FILE* stream, CalcTree::Node_t *node);
 
-void write_to_asm (const CalcTree &code)
+void set_call_addr(char* buffer);
+
+bool elf_return_value = false;
+
+const int PROG_MAX_SIZE = 100000;
+
+char CODE_BUF[PROG_MAX_SIZE];
+char* PROGRAMM_CODE = &CODE_BUF[0];
+
+std::vector<uint64_t> calls;
+std::vector<uint32_t> function_addr;
+uint32_t main_addr = 0;
+
+void write_to_elf (const CalcTree &code)
 {
-    FILE* stream = fopen (OUTPUT_CODE, "w");
+    FILE* stream = fopen (OUTPUT_BYTES, "w");
 
 
     
-    fprintf (stream, ";==========INCLUDE DREW LIB==========\n\n"
+    /*fprintf (stream, ";==========INCLUDE DREW LIB==========\n\n"
                      "segment .data\n"
                      "BUFFER_SIZE equ 100\n"
                      "buffer times BUFFER_SIZE db 0\n"
@@ -214,76 +229,108 @@ void write_to_asm (const CalcTree &code)
                     "\tmov rax, rbx\n"
                     "\tshl rax, 5\n"
                     "\tret\n"
-                    ";==========INCLUDE DREW LIB==========\n\n");
+                    ";==========INCLUDE DREW LIB==========\n\n");*/
 
-    fprintf (stream,"\nglobal _start\n_start:\n");
-            for (int i = 0; i <= GLOBAL_VARIABLES_NUM; ++i) //СОЗДАЛИ МЕСТО ПОД ПЕРЕМЕННЫЕ ДЛЯ МЕЙНА И ФИКТИВНЫЙ АДРЕС ВОЗВРАТА
-                fprintf (stream, "\tpush 0\n");
+    for (int i = 0; i <= GLOBAL_VARIABLES_NUM; ++i) {
+        mov_r10_const(PROGRAMM_CODE, 0);
+        push_r10(PROGRAMM_CODE);
+    } //СОЗДАЛИ МЕСТО ПОД ПЕРЕМЕННЫЕ ДЛЯ МЕЙНА И ФИКТИВНЫЙ АДРЕС ВОЗВРАТА
 
-    fprintf (stream,"\tcall MAIN\n" 
-                    "\tmov rax, 0x3C\n\txor rdi, rdi\n\tsyscall\n");
-    asm_undertree (stream, code.head);
+
+    calls.push_back(CODE_POS);
+    empty_call(PROGRAMM_CODE, 0xff); 
+    exit_syscall(PROGRAMM_CODE);
+    elf_undertree (stream, code.head);
+
+    DEBUG_PRINT(TRANSLATED WITHOUT CALL ADDRESSES);
+
+    set_call_addr(&CODE_BUF[0]);
+
+    DEBUG_PRINT(CALL ADDRESSES WERE SET);
+
+    ElfHeader elf_h = {};
+    ProgHeader prog_h = {};
+
+    elf_h.entry_addr = prog_h.P_VADDR + sizeof(ElfHeader) + sizeof(ProgHeader);
+    elf_h.ph_size = sizeof(ProgHeader);
+
+    prog_h.p_filesz = sizeof(ElfHeader) + sizeof(ProgHeader) + CODE_POS;
+    prog_h.p_memsz = prog_h.p_filesz;
+
+    std::cout<<sizeof(ElfHeader) + sizeof(ProgHeader)<<'\n';
+
+    char* elf_h_bytes = reinterpret_cast<char*>(&elf_h);
+    fwrite(elf_h_bytes, 1, sizeof(ElfHeader), stream);
+    char* prog_h_bytes = reinterpret_cast<char*>(&prog_h);
+    fwrite(prog_h_bytes, 1, sizeof(ProgHeader), stream);
+    fwrite(CODE_BUF, 1, CODE_POS, stream);
+
+    system("chmod +x elf_code");
     
     fclose (stream);
 }
 
 
 
-void asm_undertree (FILE* stream, CalcTree::Node_t *node)
+void elf_undertree (FILE* stream, CalcTree::Node_t *node)
 {
     switch (node -> node_data.type)
     {
         case OPERATOR:
 
-            asm_operator (stream, node);
+            elf_operator (stream, node);
             break;
 
         case QUANTITY:
 
-            fprintf (stream, "\tmov r10, %lld\t\t\t\t\t\t\t\t;Actual value: %lf\n"
-                             "\tpush r10\n",
-                             static_cast<long long> (node -> node_data.data.value * 1024), node -> node_data.data.value);
+            mov_r10_const(PROGRAMM_CODE, static_cast<long long> (node -> node_data.data.value * 1024));
+            push_r10(PROGRAMM_CODE);
             break;
 
         case BLOCK:
 
-            asm_undertree (stream, node -> left);
+            elf_undertree (stream, node -> left);
             if (node -> right) 
-                asm_undertree (stream, node -> right);
+                elf_undertree (stream, node -> right);
             break;
 
         case MAIN_DEF:
-            fprintf (stream, "MAIN:\n"
-                             "\tpush rbp\n"
-                             "\tmov rbp, rsp\n");
-            asm_undertree (stream, node -> right);
-            fprintf (stream, "\n\tpop rbp\nret\n");
+            main_addr = CODE_POS;
+            push_rbp(PROGRAMM_CODE);
+            mov_rbp_rsp(PROGRAMM_CODE);
+
+            elf_undertree (stream, node -> right);
+            
+            pop_rbp(PROGRAMM_CODE);
+            ret(PROGRAMM_CODE);
             break;
 
         case VARIABLE:
-
-            fprintf (stream, "push qword [rbp + 16 + 8*%d]\n", node -> node_data.data.code);
+            push_rbp_addr_plus(PROGRAMM_CODE, 16 + 8 * node -> node_data.data.code);
             break;
 
         case UN_FUNCTION:
 
-            asm_un_function (stream, node);
+            elf_un_function (stream, node);
             break;
 
         case COND_OPERATOR:
     
-            asm_cond_operator (stream, node);
+            elf_cond_operator (stream, node);
             break;
 
         case DEF:
-            
-            fprintf (stream, "\nFUNCTION%d:\n", node->node_data.data.code);
-            fprintf (stream, "\tpush rbp\n"
-                             "\tmov rbp, rsp\n");
+            if (function_addr.size() <= node->node_data.data.code)
+                function_addr.resize(node->node_data.data.code + 1);
+            function_addr[node->node_data.data.code] = CODE_POS;
 
-            asm_undertree (stream, node -> right);
-            fprintf (stream, "\tpop rbp\n"
-                             "\tret\n\n");
+            push_rbp(PROGRAMM_CODE);
+            mov_rbp_rsp(PROGRAMM_CODE);
+
+            elf_undertree (stream, node -> right);
+
+            pop_rbp(PROGRAMM_CODE);
+            ret(PROGRAMM_CODE);
             break;
 
         case CALL:
@@ -296,14 +343,15 @@ void asm_undertree (FILE* stream, CalcTree::Node_t *node)
             {
                 ++local_counter;
                 curr_node = curr_node -> right;
-                asm_undertree (stream, curr_node -> left);
+                elf_undertree (stream, curr_node -> left);
             }
-            fprintf (stream, "\n\tcall FUNCTION%d\n", node->node_data.data.code);
+            calls.push_back(CODE_POS);
+            empty_call(PROGRAMM_CODE, node->node_data.data.code);
             for (int i = 0; i < local_counter; ++i)
-                fprintf (stream, "\tpop r8\n");
-            if (return_value)
-                fprintf (stream, "\tpush rax\n");
-                return_value = false;
+                pop_r8(PROGRAMM_CODE);
+            if (elf_return_value)
+                push_rax(PROGRAMM_CODE);
+                elf_return_value = false;
             break;
         }
 
@@ -318,7 +366,7 @@ void asm_undertree (FILE* stream, CalcTree::Node_t *node)
 
             number_of_def = parent_search->node_data.data.code;
 
-            fprintf (stream, "\tpush qword [rbp + 16 + 8*%d]\n", node -> node_data.data.code);
+            push_rbp_addr_plus(PROGRAMM_CODE, 16 + 8*node -> node_data.data.code);
             break;
         }
 
@@ -326,36 +374,38 @@ void asm_undertree (FILE* stream, CalcTree::Node_t *node)
     } 
 }
 
-void asm_operator (FILE* stream, CalcTree::Node_t *node)
+void elf_operator (FILE* stream, CalcTree::Node_t *node)
 {
     char code = node->node_data.data.code;
 
     if (is_this_operator (code, ADD))
     {
-        asm_undertree (stream, node -> left);
-        asm_undertree (stream, node -> right);
-        fprintf (stream,"\tpop r10\n"
-                        "\tpop r11\n"
-                        "\tadd r11, r10\n"
-                        "\tpush r11\n");
+        elf_undertree (stream, node -> left);
+        elf_undertree (stream, node -> right);
+        
+        pop_r10(PROGRAMM_CODE);
+        pop_r11(PROGRAMM_CODE);
+        add_r11_r10(PROGRAMM_CODE);
+        push_r11(PROGRAMM_CODE);
         return;
     }
 
     if (is_this_operator (code, SUB))
     {
-        asm_undertree (stream, node -> left);
-        asm_undertree (stream, node -> right);
-        fprintf (stream,"\tpop r10\n"
-                        "\tpop r11\n"
-                        "\tsub r11, r10\n"
-                        "\tpush r11\n");
+        elf_undertree (stream, node -> left);
+        elf_undertree (stream, node -> right);
+        
+        pop_r10(PROGRAMM_CODE);
+        pop_r11(PROGRAMM_CODE);
+        sub_r11_r10(PROGRAMM_CODE);
+        push_r11(PROGRAMM_CODE);
         return;
     }
 
     if (is_this_operator (code, DIV))
     {
-        asm_undertree (stream, node -> left);
-        asm_undertree (stream, node -> right);
+        elf_undertree (stream, node -> left);
+        elf_undertree (stream, node -> right);
         fprintf (stream,"\tpop r8\n"
                         "\tpop rax\n"
                         "\tcqo\n"
@@ -376,8 +426,8 @@ void asm_operator (FILE* stream, CalcTree::Node_t *node)
 
     if (is_this_operator (code, MUL))
     { 
-        asm_undertree (stream, node -> left);
-        asm_undertree (stream, node -> right);
+        elf_undertree (stream, node -> left);
+        elf_undertree (stream, node -> right);
         fprintf (stream,"\tpop rax\n"
                         "\tpop rcx\n"
                         "\timul rcx\n"
@@ -390,17 +440,17 @@ void asm_operator (FILE* stream, CalcTree::Node_t *node)
 
     if (is_this_operator (code, ASSGN))
     {
-        asm_undertree (stream, node -> right);
-        if ( node->left->node_data.type != VARIABLE && node -> left -> node_data.type != ARGUMENT)
+        elf_undertree (stream, node -> right);
+        if ( node->left->node_data.type != VARIABLE && node->left->node_data.type != ARGUMENT)
             throw "Могу присвоить только переменной!";
-        fprintf (stream, "\tpop qword [rbp + 16 + 8*%d]\n", node->left->node_data.data.code);
+        pop_rbp_addr_plus(PROGRAMM_CODE, 16 + 8*node->left->node_data.data.code);
         return;   
     }
 
     if (is_this_operator (code, NOT_EQUAL))
     {
-        asm_undertree (stream, node -> left);
-        asm_undertree (stream, node -> right);
+        elf_undertree (stream, node -> left);
+        elf_undertree (stream, node -> right);
 
         fprintf(stream, "\n"
                         "\tpop r10\t\t\t\t\t\t\t\t;Conditional operator - a != b\n"
@@ -418,8 +468,8 @@ void asm_operator (FILE* stream, CalcTree::Node_t *node)
 
     if (is_this_operator (code, EQUAL))
     {
-        asm_undertree (stream, node -> left);
-        asm_undertree (stream, node -> right);
+        elf_undertree (stream, node -> left);
+        elf_undertree (stream, node -> right);
 
         fprintf(stream, "\n"
                         "\tpop r10\t\t\t\t\t\t\t\t;Conditional operator - a == b\n"
@@ -437,8 +487,8 @@ void asm_operator (FILE* stream, CalcTree::Node_t *node)
 
     if (is_this_operator (code, LESS))
     {
-        asm_undertree (stream, node -> left);
-        asm_undertree (stream, node -> right);
+        elf_undertree (stream, node -> left);
+        elf_undertree (stream, node -> right);
         fprintf(stream, "\n"
                         "\tpop r10\t\t\t\t\t\t\t\t;Conditional operator - a < b\n"
                         "\tpop r11\n"
@@ -455,8 +505,8 @@ void asm_operator (FILE* stream, CalcTree::Node_t *node)
 
     if (is_this_operator (code, MORE))
     {
-        asm_undertree (stream, node -> left);
-        asm_undertree (stream, node -> right);
+        elf_undertree (stream, node -> left);
+        elf_undertree (stream, node -> right);
         fprintf(stream, "\n"
                         "\tpop r10\t\t\t\t\t\t\t\t;Conditional operator - a > b\n"
                         "\tpop r11\n"
@@ -472,33 +522,33 @@ void asm_operator (FILE* stream, CalcTree::Node_t *node)
     }
 
     printf ("%s\n", operators[node->node_data.data.code]);
-    throw "CANNOT ASM THIS OPERATOR";
+    throw "CANNOT ELF THIS OPERATOR";
 
 }
 
 
-void asm_cond_operator (FILE* stream, CalcTree::Node_t *node) //mb is ready
+void elf_cond_operator (FILE* stream, CalcTree::Node_t *node) //mb is ready
 {
     if ( is_this_cond_op (node->node_data.data.code, "Если" ) )
     {
         int label = LABEL_COUNTER;
         LABEL_COUNTER++;
 
-        asm_undertree (stream, node->left);
+        elf_undertree (stream, node->left);
         fprintf (stream, "\tpop r10\n"
                          "\txor r11, r11\n"
                          "\tcmp r10, r11\n"
                          "\tje COND_F%d\n", label);
-        asm_undertree (stream, node->right);
+        elf_undertree (stream, node->right);
         fprintf (stream, "COND_F%d:\n", label);
     }
 }
 
-void asm_un_function (FILE* stream, CalcTree::Node_t *node)
+void elf_un_function (FILE* stream, CalcTree::Node_t *node)
 {
     if ( is_this_un_func (node->node_data.data.code, PRINT) )
     {
-        asm_undertree (stream, node->right);
+        elf_undertree (stream, node->right);
         fprintf (stream,"\tpop r8\t\t\t\t\t\t\t\t; PRINT function\n" 
                         "\tcall PRINT\n\n");
         return;
@@ -506,7 +556,7 @@ void asm_un_function (FILE* stream, CalcTree::Node_t *node)
     
     else if ( is_this_un_func (node->node_data.data.code, SQRT) )
     {
-        asm_undertree (stream, node->right);
+        elf_undertree (stream, node->right);
         fprintf (stream, "\tpop rax\n"
                          "\tcall SQRT\n"
                          "\tpush rax\n");
@@ -514,13 +564,13 @@ void asm_un_function (FILE* stream, CalcTree::Node_t *node)
     }
     else if ( is_this_un_func (node->node_data.data.code, RETURN) )
     {
-        asm_undertree (stream, node->right);
+        elf_undertree (stream, node->right);
         if (node->right) {
-            fprintf(stream, "\tpop rax\n");
-            return_value = true;
+            pop_rax(PROGRAMM_CODE);
+            elf_return_value = true;
         }   
-        fprintf (stream,"\tpop rbp\n" 
-                        "\tret\n" );
+        pop_rbp(PROGRAMM_CODE);
+        ret(PROGRAMM_CODE);
         return;
     }
     else if ( is_this_un_func (node->node_data.data.code, INPUT) )
@@ -532,5 +582,31 @@ void asm_un_function (FILE* stream, CalcTree::Node_t *node)
         return;
     }
     else
-        throw "Не могу ASM эту унарную функцию";
+        throw "Не могу ELF эту унарную функцию";
+}
+
+void set_call_addr(char* buffer) {
+    int call_num = calls.size();
+    uint32_t ptr = 0;
+    int32_t addr = 0;
+    char* value = nullptr;
+    char def_num = 0;
+
+
+    for(int j = 0; j < call_num; ++j) {
+        ptr = calls[j];
+        ++ptr;
+        if (buffer[ptr] == static_cast<char>(0xff)) {
+            addr = main_addr;
+            std::cout<<addr<<'\n';
+        } else {
+            def_num = buffer[ptr];
+            addr = function_addr[def_num];
+        }
+        addr = addr - (ptr + 4);
+        std::cout<<addr<<'\n';
+        char* value = (char*)&addr;
+        for (int i = 0; i < 4; ++i)
+            buffer[ptr++] = *value++;         
+    }
 }

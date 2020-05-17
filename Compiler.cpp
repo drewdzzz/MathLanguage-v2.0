@@ -4,6 +4,8 @@
 
 const char* OUTPUT_CODE = "asm_code.asm";
 
+const char* OUTPUT_BYTES = "elf_code";
+
 const char* INPUT_PROG = "programm.drew";
 
 #include "frontend.hpp"
@@ -11,6 +13,8 @@ const char* INPUT_PROG = "programm.drew";
 #include "differ-tree.hpp"
 
 #include "backend.hpp"
+
+#include "elf_backend.hpp"
 
 #include <ctime>
 
@@ -78,7 +82,10 @@ int main ()
     try
     {
         // DEBUG_CODE ( tree.dump("open"); )
+        write_to_elf (tree);
+        DEBUG_PRINT (WROTE TO ELF);
         write_to_asm (tree);
+        DEBUG_PRINT (WROTE TO ASM);
     }
     catch(const char* error)
     {
@@ -86,7 +93,6 @@ int main ()
         return 1;
     }
 
-    DEBUG_PRINT (WROTE TO ASM);
     DEBUG_CODE (printf("GLOBAL_VAR_NUM = %d\n", GLOBAL_VARIABLES_NUM));
 
     // system ("g++ make.cpp -o make");

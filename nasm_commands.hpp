@@ -119,6 +119,24 @@ void mov_r10_const(char*& buffer, uint64_t val) {
     }
 }
 
+void mov_rax_r9(char*& buffer) {
+    WRITE_BUFFER(0x4c);
+    WRITE_BUFFER(0x89);
+    WRITE_BUFFER(0xc8);
+}
+
+void mov_r9_rdx(char*& buffer) {
+    WRITE_BUFFER(0x49);
+    WRITE_BUFFER(0x89);
+    WRITE_BUFFER(0xd1);
+}
+
+void mov_r11_rax(char*& buffer) {
+    WRITE_BUFFER(0x49);
+    WRITE_BUFFER(0x89);
+    WRITE_BUFFER(0xc3);
+}
+
 void mov_rbp_rsp(char*& buffer) {
     WRITE_BUFFER(0x48);
     WRITE_BUFFER(0x89);
@@ -137,7 +155,12 @@ void pop_rbp_addr_plus(char*& buffer, char plus) {
     WRITE_BUFFER(plus);
 }
 
-void mov_addr(char*& buffer);
+
+void xor_rdx_rdx(char*& buffer) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0x31);
+    WRITE_BUFFER(0xd2);
+}
 
 void xor_r8_r8(char*& buffer) {
     WRITE_BUFFER(0x4d);
@@ -149,6 +172,12 @@ void xor_r11_r11(char*& buffer) {
     WRITE_BUFFER(0x4d);
     WRITE_BUFFER(0x31);
     WRITE_BUFFER(0xdb);
+}
+
+void or_rax_rdx(char*& buffer) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0x09);
+    WRITE_BUFFER(0xd0);
 }
 
 void ret(char*& buffer) {
@@ -164,6 +193,12 @@ void idiv_r8(char*& buffer) {
     WRITE_BUFFER(0x49);
     WRITE_BUFFER(0xf7);
     WRITE_BUFFER(0xf8);
+}
+
+void imul_rcx(char*& buffer) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0xf7);
+    WRITE_BUFFER(0xe9);
 }
 
 void imul_r10(char*& buffer) {
@@ -202,6 +237,28 @@ void sub_r11_r10(char*& buffer) {
     WRITE_BUFFER(0xd3);
 }
 
+
+void shr_rax(char*& buffer, char val) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0xc1);
+    WRITE_BUFFER(0xe8);
+    WRITE_BUFFER(val);
+}
+
+void shr_r8(char*& buffer, char val) {
+    WRITE_BUFFER(0x49);
+    WRITE_BUFFER(0xc1);
+    WRITE_BUFFER(0xe8);
+    WRITE_BUFFER(val);
+}
+
+void shl_rdx(char*& buffer, char val) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0xc1);
+    WRITE_BUFFER(0xe2);
+    WRITE_BUFFER(val);
+}
+
 void syscall(char*& buffer) {
     WRITE_BUFFER(0x0f);
     WRITE_BUFFER(0x05);
@@ -230,7 +287,10 @@ void empty_call(char*& buffer, char def_num) {
 
 
 
-
+void push_byte(char*& buffer, char val) {
+    WRITE_BUFFER(0x6a);
+    WRITE_BUFFER(val);
+}
 
 
 
@@ -238,4 +298,36 @@ void cmp_r10_r11(char*& buffer) {
     WRITE_BUFFER(0x4d);
     WRITE_BUFFER(0x39);
     WRITE_BUFFER(0xda);
+}
+
+void cmp_r11_r10(char*& buffer) {
+    WRITE_BUFFER(0x4d);
+    WRITE_BUFFER(0x39);
+    WRITE_BUFFER(0xd3);
+}
+
+
+void je_byte(char*& buffer, char val) {
+    WRITE_BUFFER(0x74);
+    WRITE_BUFFER(val);
+}
+
+void jne_byte(char*& buffer, char val) {
+    WRITE_BUFFER(0x75);
+    WRITE_BUFFER(val);
+}
+
+void jl_byte(char*& buffer, char val) {
+    WRITE_BUFFER(0x7c);
+    WRITE_BUFFER(val);
+}
+
+void jg_byte(char*& buffer, char val) {
+    WRITE_BUFFER(0x7f);
+    WRITE_BUFFER(val);
+}
+
+void jmp_byte(char*& buffer, char val) {
+    WRITE_BUFFER(0xeb);
+    WRITE_BUFFER(val);
 }

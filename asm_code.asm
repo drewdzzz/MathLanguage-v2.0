@@ -211,22 +211,85 @@ _start:
 FUNCTION0:
 	push rbp
 	mov rbp, rsp
-	mov r10, 2048								;Actual value: 2.000000
+	push qword [rbp + 16 + 8*0]
+	mov r10, 1024								;Actual value: 1.000000
 	push r10
-	pop qword [rbp + 16 + 8*0]
+
+	pop r10								;Conditional operator - a == b
+	pop r11
+	cmp r10, r11
+	je COND_T2
+	push 0
+	jmp COND_F2
+COND_T2:
+	push 1
+COND_F2:
+
+	pop r10
+	xor r11, r11
+	cmp r10, r11
+	je COND_F1
+	push qword [rbp + 16 + 8*0]
+	pop rax
+	pop rbp
+	ret
+COND_F1:
+	push qword [rbp + 16 + 8*0]
+	mov r10, 1024								;Actual value: 1.000000
+	push r10
+
+	pop r10								;Conditional operator - a != b
+	pop r11
+	cmp r10, r11
+	jne COND_T4
+	push 0
+	jmp COND_F4
+COND_T4:
+	push 1
+COND_F4:
+
+	pop r10
+	xor r11, r11
+	cmp r10, r11
+	je COND_F3
+	push qword [rbp + 16 + 8*0]
+	push qword [rbp + 16 + 8*0]
+	mov r10, 1024								;Actual value: 1.000000
+	push r10
+	pop r10
+	pop r11
+	sub r11, r10
+	push r11
+
+	call FUNCTION0
+	pop r8
+	push rax
+	pop rax
+	pop rcx
+	imul rcx
+	shr rax, 10
+	shl rdx, 54
+	or rax, rdx
+	push rax
+	pop rax
+	pop rbp
+	ret
+COND_F3:
 	pop rbp
 	ret
 
 MAIN:
 	push rbp
 	mov rbp, rsp
-	mov r10, 10240								;Actual value: 10.000000
+	mov r10, 5120								;Actual value: 5.000000
 	push r10
 	pop qword [rbp + 16 + 8*0]
 push qword [rbp + 16 + 8*0]
 
 	call FUNCTION0
 	pop r8
+	push rax
+	pop qword [rbp + 16 + 8*0]
 
 	pop rbp
 ret

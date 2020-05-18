@@ -406,21 +406,21 @@ void elf_operator (FILE* stream, CalcTree::Node_t *node)
     {
         elf_undertree (stream, node -> left);
         elf_undertree (stream, node -> right);
-        fprintf (stream,"\tpop r8\n"
-                        "\tpop rax\n"
-                        "\tcqo\n"
-                        "\tidiv r8\n"
-                        "\tmov r9, rdx\n"
-                        "\txor rdx, rdx\n"
-                        "\tmov r10, 1024\n"
-                        "\timul r10\n"
-                        "\tmov r11, rax\n"
-                        "\tmov rax, r9\n"
-                        "\tshr r8, 10\n"
-                        "\tcqo\n"
-                        "\tidiv r8\n"
-                        "\tadd rax, r11\n"
-                        "\tpush rax\n");       
+        pop_r8(PROGRAMM_CODE);
+        pop_rax(PROGRAMM_CODE);
+        cqo(PROGRAMM_CODE);
+        idiv_r8(PROGRAMM_CODE);
+        mov_r9_rdx(PROGRAMM_CODE);
+        xor_rdx_rdx(PROGRAMM_CODE);
+        mov_r10_const(PROGRAMM_CODE, 1024);
+        imul_r10(PROGRAMM_CODE);
+        mov_r11_rax(PROGRAMM_CODE);
+        mov_rax_r9(PROGRAMM_CODE);
+        shr_r8(PROGRAMM_CODE, 10);
+        cqo(PROGRAMM_CODE);
+        idiv_r8(PROGRAMM_CODE);
+        add_rax_r11(PROGRAMM_CODE);
+        push_rax(PROGRAMM_CODE);     
         return;
     }
 
@@ -428,13 +428,13 @@ void elf_operator (FILE* stream, CalcTree::Node_t *node)
     { 
         elf_undertree (stream, node -> left);
         elf_undertree (stream, node -> right);
-        fprintf (stream,"\tpop rax\n"
-                        "\tpop rcx\n"
-                        "\timul rcx\n"
-                        "\tshr rax, 10\n"
-                        "\tshl rdx, 54\n"
-                        "\tor rax, rdx\n"
-                        "\tpush rax\n");
+        pop_rax(PROGRAMM_CODE);
+        pop_rcx(PROGRAMM_CODE);
+        imul_rcx(PROGRAMM_CODE);
+        shr_rax(PROGRAMM_CODE, 10);
+        shl_rdx(PROGRAMM_CODE, 54);
+        or_rax_rdx(PROGRAMM_CODE);
+        push_rax(PROGRAMM_CODE);
         return;
     }
 
@@ -452,17 +452,15 @@ void elf_operator (FILE* stream, CalcTree::Node_t *node)
         elf_undertree (stream, node -> left);
         elf_undertree (stream, node -> right);
 
-        fprintf(stream, "\n"
-                        "\tpop r10\t\t\t\t\t\t\t\t;Conditional operator - a != b\n"
-                        "\tpop r11\n"
-                        "\tcmp r10, r11\n"
-                        "\tjne COND_T%d\n"
-                        "\tpush 0\n"
-                        "\tjmp COND_F%d\n"
-                        "COND_T%d:\n"
-                        "\tpush 1\n"
-                        "COND_F%d:\n\n", LABEL_COUNTER, LABEL_COUNTER, LABEL_COUNTER, LABEL_COUNTER);
-        LABEL_COUNTER++;
+        pop_r10(PROGRAMM_CODE);
+        pop_r11(PROGRAMM_CODE);
+        cmp_r10_r11(PROGRAMM_CODE);
+
+        jne_byte(PROGRAMM_CODE, 0x04);
+        push_byte(PROGRAMM_CODE, 0);
+        jmp_byte(PROGRAMM_CODE, 0x02);
+        push_byte(PROGRAMM_CODE, 1);
+
         return;
     }
 
@@ -471,17 +469,14 @@ void elf_operator (FILE* stream, CalcTree::Node_t *node)
         elf_undertree (stream, node -> left);
         elf_undertree (stream, node -> right);
 
-        fprintf(stream, "\n"
-                        "\tpop r10\t\t\t\t\t\t\t\t;Conditional operator - a == b\n"
-                        "\tpop r11\n"
-                        "\tcmp r10, r11\n"
-                        "\tje COND_T%d\n"
-                        "\tpush 0\n"
-                        "\tjmp COND_F%d\n"
-                        "COND_T%d:\n"
-                        "\tpush 1\n"
-                        "COND_F%d:\n\n", LABEL_COUNTER, LABEL_COUNTER, LABEL_COUNTER, LABEL_COUNTER);
-        LABEL_COUNTER++;
+        pop_r10(PROGRAMM_CODE);
+        pop_r11(PROGRAMM_CODE);
+        cmp_r10_r11(PROGRAMM_CODE);
+        je_byte(PROGRAMM_CODE, 0x04);
+        push_byte(PROGRAMM_CODE, 0);
+        jmp_byte(PROGRAMM_CODE, 0x02);
+        push_byte(PROGRAMM_CODE, 1);
+
         return; 
     }
 
@@ -489,17 +484,13 @@ void elf_operator (FILE* stream, CalcTree::Node_t *node)
     {
         elf_undertree (stream, node -> left);
         elf_undertree (stream, node -> right);
-        fprintf(stream, "\n"
-                        "\tpop r10\t\t\t\t\t\t\t\t;Conditional operator - a < b\n"
-                        "\tpop r11\n"
-                        "\tcmp r11, r10\n"
-                        "\tjl COND_T%d\n"
-                        "\tpush 0\n"
-                        "\tjmp COND_F%d\n"
-                        "COND_T%d:\n"
-                        "\tpush 1\n"
-                        "COND_F%d:\n\n", LABEL_COUNTER, LABEL_COUNTER, LABEL_COUNTER, LABEL_COUNTER);
-        LABEL_COUNTER++;
+        pop_r10(PROGRAMM_CODE);
+        pop_r11(PROGRAMM_CODE);
+        cmp_r11_r10(PROGRAMM_CODE);
+        jl_byte(PROGRAMM_CODE, 0x04);
+        push_byte(PROGRAMM_CODE, 0);
+        jmp_byte(PROGRAMM_CODE, 0x02);
+        push_byte(PROGRAMM_CODE, 1);
         return; 
     }
 
@@ -507,40 +498,35 @@ void elf_operator (FILE* stream, CalcTree::Node_t *node)
     {
         elf_undertree (stream, node -> left);
         elf_undertree (stream, node -> right);
-        fprintf(stream, "\n"
-                        "\tpop r10\t\t\t\t\t\t\t\t;Conditional operator - a > b\n"
-                        "\tpop r11\n"
-                        "\tcmp r11, r10\n"
-                        "\tjg COND_T%d\n"
-                        "\tpush 0\n"
-                        "\tjmp COND_F%d\n"
-                        "COND_T%d:\n"
-                        "\tpush 1\n"
-                        "COND_F%d:\n\n", LABEL_COUNTER, LABEL_COUNTER, LABEL_COUNTER, LABEL_COUNTER);
-        LABEL_COUNTER++;
+        pop_r10(PROGRAMM_CODE);
+        pop_r11(PROGRAMM_CODE);
+        cmp_r11_r10(PROGRAMM_CODE);
+        jg_byte(PROGRAMM_CODE, 0x04);
+        push_byte(PROGRAMM_CODE, 0);
+        jmp_byte(PROGRAMM_CODE, 0x02);
+        push_byte(PROGRAMM_CODE, 1);
         return; 
     }
 
-    printf ("%s\n", operators[node->node_data.data.code]);
+    DEBUG_CODE(printf ("%s\n", operators[node->node_data.data.code]))
     throw "CANNOT ELF THIS OPERATOR";
 
 }
 
 
-void elf_cond_operator (FILE* stream, CalcTree::Node_t *node) //mb is ready
+void elf_cond_operator (FILE* stream, CalcTree::Node_t *node) 
 {
     if ( is_this_cond_op (node->node_data.data.code, "Если" ) )
     {
-        int label = LABEL_COUNTER;
-        LABEL_COUNTER++;
 
         elf_undertree (stream, node->left);
-        fprintf (stream, "\tpop r10\n"
-                         "\txor r11, r11\n"
-                         "\tcmp r10, r11\n"
-                         "\tje COND_F%d\n", label);
+        pop_r10(PROGRAMM_CODE);
+        xor_r11_r11(PROGRAMM_CODE);
+        cmp_r10_r11(PROGRAMM_CODE);
+        uint64_t jmp_pos = CODE_POS + 1;
+        je_byte(PROGRAMM_CODE, 0);
         elf_undertree (stream, node->right);
-        fprintf (stream, "COND_F%d:\n", label);
+        CODE_BUF[jmp_pos] = CODE_POS - (jmp_pos+1);
     }
 }
 

@@ -25,32 +25,51 @@ char* PROGRAMM_CODE = &CODE_BUF[0];
 
 std::vector<uint64_t> calls;
 std::vector<uint32_t> function_addr;
+
+
 uint32_t main_addr = 0;
+uint32_t SQRT_ADDR = 0;
+uint32_t SCAN_ADDR = 0;
+uint32_t PRINT_ADDR = 0;
+uint32_t BUFFER_ADDR = 0;
 
 void write_to_elf (const CalcTree &code)
 {
     FILE* stream = fopen (OUTPUT_BYTES, "w");
 
+    BUFFER_ADDR = CODE_POS;
+    for (int i = 0; i < BUFFER_SIZE; ++i) {   //ВЫДЕЛИЛИ БУФФЕР
+        *PROGRAMM_CODE++ = 0x00;
+        ++CODE_POS;
+    }
 
-    
-    /*fprintf (stream, ";==========INCLUDE DREW LIB==========\n\n"
-                     "segment .data\n"
-                     "BUFFER_SIZE equ 100\n"
-                     "buffer times BUFFER_SIZE db 0\n"
-                     "new_line db 0x0a\n"
-                     );
+    *PROGRAMM_CODE++ = 0x0a;
+    ++CODE_POS;
 
-    fprintf (stream, "segment .text\n\n");
+    for (int i = 0; i <= GLOBAL_VARIABLES_NUM; ++i) {
+        mov_r10_const(PROGRAMM_CODE, 0);
+        push_r10(PROGRAMM_CODE);
+    } //СОЗДАЛИ МЕСТО ПОД ПЕРЕМЕННЫЕ ДЛЯ МЕЙНА И ФИКТИВНЫЙ АДРЕС ВОЗВРАТА
 
-    fprintf (stream,";==============================================================\n"
-                    ";Entry:		    requires buffer and const BUFFER_SIZE\n"
-                    ";				R8	- long long value\n"
-                    ";Exit: 		    RDX - length of buffer\n"
-                    ";				RSI - ptr to number in buffer\n"
-                    ";				ES  = DS\n"
-                    ";\n"
-                    ";Destr:		    RCX RAX	R8D	R10B R9B\n"		
-                    ";==============================================================\n"
+
+    calls.push_back(CODE_POS);
+    empty_call(PROGRAMM_CODE, 0xff); 
+    exit_syscall(PROGRAMM_CODE);
+
+
+    PRINT_ADDR = PRINT_FUNC(PROGRAMM_CODE, BUFFER_ADDR + sizeof(ProgHeader) + sizeof(ElfHeader) + LOAD_ADDR);
+
+
+
+    /*// ";==============================================================\n"
+                    // ";Entry:		    requires buffer and const BUFFER_SIZE\n"
+                    // ";				R8	- long long value\n"
+                    // ";Exit: 		    RDX - length of buffer\n"
+                    // ";				RSI - ptr to number in buffer\n"
+                    // ";				ES  = DS\n"
+                    // ";\n"
+                    // ";Destr:		    RCX RAX	R8D	R10B R9B\n"		
+                       // ";==============================================================\n"
                     "\tdec_format:\n"
                     "\tmov rsi, buffer\n"
                     "\tadd rsi, BUFFER_SIZE\n"
@@ -229,17 +248,10 @@ void write_to_elf (const CalcTree &code)
                     "\tmov rax, rbx\n"
                     "\tshl rax, 5\n"
                     "\tret\n"
-                    ";==========INCLUDE DREW LIB==========\n\n");*/
+                    ";==========INCLUDE DREW LIB==========\n\n");
 
-    for (int i = 0; i <= GLOBAL_VARIABLES_NUM; ++i) {
-        mov_r10_const(PROGRAMM_CODE, 0);
-        push_r10(PROGRAMM_CODE);
-    } //СОЗДАЛИ МЕСТО ПОД ПЕРЕМЕННЫЕ ДЛЯ МЕЙНА И ФИКТИВНЫЙ АДРЕС ВОЗВРАТА
+    */
 
-
-    calls.push_back(CODE_POS);
-    empty_call(PROGRAMM_CODE, 0xff); 
-    exit_syscall(PROGRAMM_CODE);
     elf_undertree (stream, code.head);
 
     DEBUG_PRINT(TRANSLATED WITHOUT CALL ADDRESSES);
@@ -250,12 +262,17 @@ void write_to_elf (const CalcTree &code)
 
     ElfHeader elf_h = {};
     ProgHeader prog_h = {};
+    SecHeader sec_h = {};
 
-    elf_h.entry_addr = prog_h.P_VADDR + sizeof(ElfHeader) + sizeof(ProgHeader);
+    elf_h.entry_addr = prog_h.P_VADDR + sizeof(ElfHeader) + sizeof(ProgHeader) + BUFFER_SIZE + 1;
     elf_h.ph_size = sizeof(ProgHeader);
+    elf_h.SH_OFFSET = CODE_POS + sizeof(ElfHeader) + sizeof(ProgHeader);
+    elf_h.SH_SIZE = sizeof(SecHeader) / elf_h.SH_NUM;
 
-    prog_h.p_filesz = sizeof(ElfHeader) + sizeof(ProgHeader) + CODE_POS;
+    prog_h.p_filesz = sizeof(ElfHeader) + sizeof(ProgHeader) + CODE_POS + sizeof(SecHeader);
     prog_h.p_memsz = prog_h.p_filesz;
+
+    sec_h.text_size = CODE_POS - (sec_h.text_offset - sizeof(ElfHeader) - sizeof(ProgHeader));
 
     std::cout<<sizeof(ElfHeader) + sizeof(ProgHeader)<<'\n';
 
@@ -264,6 +281,9 @@ void write_to_elf (const CalcTree &code)
     char* prog_h_bytes = reinterpret_cast<char*>(&prog_h);
     fwrite(prog_h_bytes, 1, sizeof(ProgHeader), stream);
     fwrite(CODE_BUF, 1, CODE_POS, stream);
+
+    char* sec_h_bytes = reinterpret_cast<char*>(&sec_h);
+    fwrite(sec_h_bytes, 1, sizeof(SecHeader), stream);
 
     system("chmod +x elf_code");
     
@@ -535,8 +555,20 @@ void elf_un_function (FILE* stream, CalcTree::Node_t *node)
     if ( is_this_un_func (node->node_data.data.code, PRINT) )
     {
         elf_undertree (stream, node->right);
-        fprintf (stream,"\tpop r8\t\t\t\t\t\t\t\t; PRINT function\n" 
-                        "\tcall PRINT\n\n");
+        pop_r8(PROGRAMM_CODE);
+
+        union{
+            uint32_t val;
+            char bytes[4];
+        } print_add;
+
+        print_add.val = PRINT_ADDR - (CODE_POS + 5) ;
+        *PROGRAMM_CODE++ = 0xe8;
+        ++CODE_POS;
+        for (int i = 0; i < 4; ++i) {
+            *PROGRAMM_CODE++ = print_add.bytes[i];
+            ++CODE_POS;
+        }
         return;
     }
     
@@ -584,7 +616,7 @@ void set_call_addr(char* buffer) {
         ++ptr;
         if (buffer[ptr] == static_cast<char>(0xff)) {
             addr = main_addr;
-            std::cout<<addr<<'\n';
+            std::cout<<"MAIN_POS:"<<addr+sizeof(ProgHeader)+sizeof(ElfHeader)<<'\n';
         } else {
             def_num = buffer[ptr];
             addr = function_addr[def_num];

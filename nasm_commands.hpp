@@ -79,7 +79,7 @@ void inc_rbx(char*& buffer) {
     ++CODE_POS;
     *buffer++ = 0xff;
     ++CODE_POS;
-    *buffer++ = 0xc1;
+    *buffer++ = 0xc3;
     ++CODE_POS;
 }
 
@@ -88,7 +88,7 @@ void inc_rcx(char*& buffer) {
     ++CODE_POS;
     *buffer++ = 0xff;
     ++CODE_POS;
-    *buffer++ = 0xc2;
+    *buffer++ = 0xc1;
     ++CODE_POS;
 }
 
@@ -97,7 +97,7 @@ void inc_rdx(char*& buffer) {
     ++CODE_POS;
     *buffer++ = 0xff;
     ++CODE_POS;
-    *buffer++ = 0xc3;
+    *buffer++ = 0xc2;
     ++CODE_POS;
 }
 
@@ -119,10 +119,31 @@ void mov_r10_const(char*& buffer, uint64_t val) {
     }
 }
 
+void mov_rsi_const(char*& buffer, uint64_t val) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0xbe);
+
+    union {
+        uint64_t quantity;
+        char bytes[8];
+    } value;
+    value.quantity = val;
+
+    for (int i = 0; i < 8; ++i) {
+        WRITE_BUFFER(value.bytes[i]);
+    }
+}
+
 void mov_rax_r9(char*& buffer) {
     WRITE_BUFFER(0x4c);
     WRITE_BUFFER(0x89);
     WRITE_BUFFER(0xc8);
+}
+
+void mov_rcx_rdx(char*& buffer) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0x89);
+    WRITE_BUFFER(0xd1);
 }
 
 void mov_r9_rdx(char*& buffer) {
@@ -205,6 +226,32 @@ void imul_r10(char*& buffer) {
     WRITE_BUFFER(0x49);
     WRITE_BUFFER(0xf7);
     WRITE_BUFFER(0xea);
+}
+
+void dec_rcx(char*& buffer) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0xc9);
+}
+
+void dec_rsi(char*& buffer) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0xce);
+}
+
+void add_rdx_byte(char*& buffer, char val) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0x83);
+    WRITE_BUFFER(0xc2);
+    WRITE_BUFFER(val);
+}
+
+void add_rsi_byte(char*& buffer, char val) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0x83);
+    WRITE_BUFFER(0xc6);
+    WRITE_BUFFER(val);
 }
 
 void add_r9_r10(char*& buffer) {
@@ -330,4 +377,236 @@ void jg_byte(char*& buffer, char val) {
 void jmp_byte(char*& buffer, char val) {
     WRITE_BUFFER(0xeb);
     WRITE_BUFFER(val);
+}
+
+void push_r8(char*& buffer) {
+    WRITE_BUFFER(0x41);
+    WRITE_BUFFER(0x50);
+}
+
+void neg_r8(char*& buffer) {
+    WRITE_BUFFER(0x49);
+    WRITE_BUFFER(0xf7);
+    WRITE_BUFFER(0xd8);
+}
+
+void inc_rsi(char*& buffer) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0xc6);
+}
+
+void dec_rdx(char*& buffer) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0xca);
+}
+
+void xor_rax_rax(char*& buffer) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0x31);
+    WRITE_BUFFER(0xc0);
+}
+
+void xor_rdi_rdi(char*& buffer) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0x31);
+    WRITE_BUFFER(0xff);
+}
+
+uint32_t PRINT_FUNC(char*& buffer, uint32_t BUFFER_ADDR) {
+
+    mov_rsi_const(buffer, BUFFER_ADDR);
+    add_rsi_byte(buffer, 0x64);
+
+    WRITE_BUFFER(0x45);
+    WRITE_BUFFER(0x30);  //xor r10b r10b
+    WRITE_BUFFER(0xd2);
+
+    WRITE_BUFFER(0x41);
+    WRITE_BUFFER(0xb9);
+    WRITE_BUFFER(0x0a);
+    WRITE_BUFFER(0x00);  //mov r9d, 0xa
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+
+    WRITE_BUFFER(0xb9);
+    WRITE_BUFFER(0x13);
+    WRITE_BUFFER(0x00);  //mov ecx, 0x13
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+
+    WRITE_BUFFER(0x4c);
+    WRITE_BUFFER(0x89);  //mov rax, r8
+    WRITE_BUFFER(0xc0);
+
+    dec_rsi(buffer);
+
+    WRITE_BUFFER(0x41);
+    WRITE_BUFFER(0xfe);  //inc r10b
+    WRITE_BUFFER(0xc2);
+
+    xor_rdx_rdx(buffer);
+
+    WRITE_BUFFER(0x49);
+    WRITE_BUFFER(0xf7);  //div r9
+    WRITE_BUFFER(0xf1);
+
+    add_rdx_byte(buffer, 0x30);
+
+    WRITE_BUFFER(0x88);  //mov [rsi], dl
+    WRITE_BUFFER(0x16);
+
+    WRITE_BUFFER(0xe2);  //LOOP
+    WRITE_BUFFER(0xec);
+
+    xor_rdx_rdx(buffer);
+
+    WRITE_BUFFER(0x44);
+    WRITE_BUFFER(0x88);  //mov dl, r10b
+    WRITE_BUFFER(0xd2);
+    
+    WRITE_BUFFER(0x8c); //mov eax, ds
+    WRITE_BUFFER(0xd8);
+
+    WRITE_BUFFER(0x8e);  //mov es, eax
+    WRITE_BUFFER(0xc0);
+
+    WRITE_BUFFER(0xb0);  //mov al, 0x30
+    WRITE_BUFFER(0x30);
+
+    mov_rcx_rdx(buffer);
+
+    dec_rcx(buffer);
+
+    WRITE_BUFFER(0x3a);  //cmp al, [rsi]
+    WRITE_BUFFER(0x06);
+
+    jne_byte(buffer, 0x08);  //jne dec_format.break
+
+    inc_rsi(buffer);
+
+    dec_rdx(buffer);
+
+    WRITE_BUFFER(0xe2);  //loop
+    WRITE_BUFFER(0xf4);
+
+    ret(buffer);
+
+    uint32_t pos = CODE_POS;
+
+    xor_rax_rax(buffer);
+
+    WRITE_BUFFER(0x49);  //cmp r8 rax
+    WRITE_BUFFER(0x39);
+    WRITE_BUFFER(0xc0);
+
+    WRITE_BUFFER(0x7d);  //lge PRINT.positive
+    WRITE_BUFFER(0x20); 
+
+    mov_rsi_const(buffer, BUFFER_ADDR);
+
+    WRITE_BUFFER(0xba);  //mov edx, 1
+    WRITE_BUFFER(0x01);  
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+
+    WRITE_BUFFER(0xc6);  //mov byte [rsi], 0x2d
+    WRITE_BUFFER(0x06);
+    WRITE_BUFFER(0x2d);
+
+    xor_rax_rax(buffer);
+
+    inc_rax(buffer);
+
+    xor_rdi_rdi(buffer);
+
+    syscall(buffer);
+
+    neg_r8(buffer);
+
+    push_r8(buffer);
+
+    shr_r8(buffer, 0x0a);
+
+    WRITE_BUFFER(0xe8);  //call dec_format
+    WRITE_BUFFER(0x7b);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0xff);
+
+    xor_rax_rax(buffer);
+    inc_rax(buffer);
+    xor_rdi_rdi(buffer);
+
+    syscall(buffer);
+
+    pop_r8(buffer);
+
+    mov_rsi_const(buffer, BUFFER_ADDR);
+
+    WRITE_BUFFER(0xba);  //mov edx, 1
+    WRITE_BUFFER(0x01);  
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+
+    WRITE_BUFFER(0xc6);  //mov byte [rsi], 0x2e
+    WRITE_BUFFER(0x06);
+    WRITE_BUFFER(0x2e);
+
+    xor_rax_rax(buffer);
+    inc_rax(buffer);
+    xor_rdi_rdi(buffer);
+    syscall(buffer);
+    
+    WRITE_BUFFER(0x49);  //and r8 0x3ff
+    WRITE_BUFFER(0x81);
+    WRITE_BUFFER(0xe0);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0x03);
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+
+    WRITE_BUFFER(0x49); //shl r8, 0xa
+    WRITE_BUFFER(0xc1);
+    WRITE_BUFFER(0xe0);
+    WRITE_BUFFER(0x0a);
+
+    WRITE_BUFFER(0x4c); //mov rax, r8
+    WRITE_BUFFER(0x89);
+    WRITE_BUFFER(0xc0);
+
+    cqo(buffer);
+
+    WRITE_BUFFER(0x41);  //mov r8d, 0x3e8
+    WRITE_BUFFER(0xb8);
+    WRITE_BUFFER(0xe8);
+    WRITE_BUFFER(0x03);
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+
+    idiv_r8(buffer);
+
+    WRITE_BUFFER(0x49);  //mov r8 rax
+    WRITE_BUFFER(0x89);
+    WRITE_BUFFER(0xc0);
+
+    WRITE_BUFFER(0xe8);  //call dec_format
+    WRITE_BUFFER(0x30);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0xff);
+
+    xor_rax_rax(buffer);
+    inc_rax(buffer);
+    xor_rdi_rdi(buffer);
+    inc_rdx(buffer);
+    syscall(buffer);
+
+    ret(buffer);
+
+    return pos;
+
 }

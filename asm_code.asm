@@ -281,7 +281,7 @@ COND_F3:
 MAIN:
 	push rbp
 	mov rbp, rsp
-	mov r10, 5120								;Actual value: 5.000000
+	mov r10, 6144								;Actual value: 6.000000
 	push r10
 	pop qword [rbp + 16 + 8*0]
 push qword [rbp + 16 + 8*0]
@@ -290,6 +290,15 @@ push qword [rbp + 16 + 8*0]
 	pop r8
 	push rax
 	pop qword [rbp + 16 + 8*0]
+	mov r10, 5120								;Actual value: 5.000000
+	push r10
+	pop r8								; PRINT function
+	call PRINT
+
+push qword [rbp + 16 + 8*0]
+	pop r8								; PRINT function
+	call PRINT
+
 
 	pop rbp
 ret

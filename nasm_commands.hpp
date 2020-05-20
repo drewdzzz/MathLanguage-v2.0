@@ -66,46 +66,32 @@ void pop_r12(char*& buffer) {
 }
 
 void inc_rax(char*& buffer) {
-    *buffer++ = 0x48;
-    ++CODE_POS;
-    *buffer++ = 0xff;
-    ++CODE_POS;
-    *buffer++ = 0xc0;
-    ++CODE_POS;
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0xc0);
 }
 
 void inc_rbx(char*& buffer) {
-    *buffer++ = 0x48;
-    ++CODE_POS;
-    *buffer++ = 0xff;
-    ++CODE_POS;
-    *buffer++ = 0xc3;
-    ++CODE_POS;
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0xc3);
 }
 
 void inc_rcx(char*& buffer) {
-    *buffer++ = 0x48;
-    ++CODE_POS;
-    *buffer++ = 0xff;
-    ++CODE_POS;
-    *buffer++ = 0xc1;
-    ++CODE_POS;
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0xc1);
 }
 
 void inc_rdx(char*& buffer) {
-    *buffer++ = 0x48;
-    ++CODE_POS;
-    *buffer++ = 0xff;
-    ++CODE_POS;
-    *buffer++ = 0xc2;
-    ++CODE_POS;
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0xc2);
 }
 
 void mov_r10_const(char*& buffer, uint64_t val) {
-    *buffer++ = 0x49; 
-    ++CODE_POS;
-    *buffer++ = 0xba;
-    ++CODE_POS;
+    WRITE_BUFFER(0x49);
+    WRITE_BUFFER(0xba);
     
     union {
         uint64_t quantity;

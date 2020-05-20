@@ -1,6 +1,7 @@
 ///@file
 
-#define DEBUG
+//#define DEBUG
+//#define ASM_CODE
 
 const char* OUTPUT_CODE = "asm_code.asm";
 
@@ -84,8 +85,10 @@ int main ()
         // DEBUG_CODE ( tree.dump("open"); )
         write_to_elf (tree);
         DEBUG_PRINT (WROTE TO ELF);
+    #ifdef ASM_CODE
         write_to_asm (tree);
         DEBUG_PRINT (WROTE TO ASM);
+    #endif
     }
     catch(const char* error)
     {

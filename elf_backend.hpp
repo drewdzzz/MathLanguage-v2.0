@@ -458,13 +458,11 @@ void set_call_addr(char* buffer) {
         ++ptr;
         if (buffer[ptr] == static_cast<char>(0xff)) {
             addr = main_addr;
-            std::cout<<"MAIN_POS:"<<addr+sizeof(ProgHeader)+sizeof(ElfHeader)<<'\n';
         } else {
             def_num = buffer[ptr];
             addr = function_addr[def_num];
         }
         addr = addr - (ptr + 4);
-        std::cout<<addr<<'\n';
         char* value = (char*)&addr;
         for (int i = 0; i < 4; ++i)
             buffer[ptr++] = *value++;         

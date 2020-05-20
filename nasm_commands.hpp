@@ -804,3 +804,81 @@ uint32_t SCAN_FUNC(char*& buffer, uint32_t BUFFER_ADDR) {
 
     return pos;
 }
+
+void SQRT_FUNC(char*& buffer) {
+
+    WRITE_BUFFER(0x48); //xor rbx, rbx
+    WRITE_BUFFER(0x31);
+    WRITE_BUFFER(0xdb);
+
+    WRITE_BUFFER(0x48); //bsd rcx, rax
+    WRITE_BUFFER(0x0f);
+    WRITE_BUFFER(0xbd);
+    WRITE_BUFFER(0xc8);
+
+    WRITE_BUFFER(0x80); //and cl 0xfe
+    WRITE_BUFFER(0xe1);
+    WRITE_BUFFER(0xfe);
+
+    WRITE_BUFFER(0xba); //mov edx, 1
+    WRITE_BUFFER(0x01);
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+
+    WRITE_BUFFER(0x48); //shl rdx, cl
+    WRITE_BUFFER(0xd3);
+    WRITE_BUFFER(0xe2);
+
+    WRITE_BUFFER(0x48); //mov rsi rbx
+    WRITE_BUFFER(0x89);
+    WRITE_BUFFER(0xde);
+
+    WRITE_BUFFER(0x48); //add rsi rdx
+    WRITE_BUFFER(0x01);
+    WRITE_BUFFER(0xd6);
+
+    WRITE_BUFFER(0x48); //cmp rsi rax
+    WRITE_BUFFER(0x39);
+    WRITE_BUFFER(0xc6);
+
+    WRITE_BUFFER(0x77); //ja label
+    WRITE_BUFFER(0x0b);
+
+    WRITE_BUFFER(0x48); //sub rax rsi
+    WRITE_BUFFER(0x29); 
+    WRITE_BUFFER(0xf0);
+
+    WRITE_BUFFER(0x48); //shr rbx 1
+    WRITE_BUFFER(0xd1);
+    WRITE_BUFFER(0xeb);
+
+    WRITE_BUFFER(0x48); //add rbx rdx
+    WRITE_BUFFER(0x01);
+    WRITE_BUFFER(0xd3);
+
+    jmp_byte(buffer, 0x03); //jmp next
+
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0xd1);
+    WRITE_BUFFER(0xeb);
+
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0xc1);
+    WRITE_BUFFER(0xea);
+    WRITE_BUFFER(0x02);
+
+    jne_byte(buffer, 0xe1); //jne refine
+
+    WRITE_BUFFER(0x48); //mov rax, rbx
+    WRITE_BUFFER(0x89);
+    WRITE_BUFFER(0xd8);
+    
+    WRITE_BUFFER(0x48); //shl rax 5
+    WRITE_BUFFER(0xc1);
+    WRITE_BUFFER(0xe0);
+    WRITE_BUFFER(0x05);
+
+    ret(buffer);
+
+}

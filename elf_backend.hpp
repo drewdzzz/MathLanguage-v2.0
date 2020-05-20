@@ -59,198 +59,8 @@ void write_to_elf (const CalcTree &code)
 
     PRINT_ADDR = PRINT_FUNC(PROGRAMM_CODE, BUFFER_ADDR + sizeof(ProgHeader) + sizeof(ElfHeader) + LOAD_ADDR);
     SCAN_ADDR  = SCAN_FUNC(PROGRAMM_CODE, BUFFER_ADDR + sizeof(ProgHeader) + sizeof(ElfHeader) + LOAD_ADDR);
-
-
-    /*// ";==============================================================\n"
-                    // ";Entry:		    requires buffer and const BUFFER_SIZE\n"
-                    // ";				R8	- long long value\n"
-                    // ";Exit: 		    RDX - length of buffer\n"
-                    // ";				RSI - ptr to number in buffer\n"
-                    // ";				ES  = DS\n"
-                    // ";\n"
-                    // ";Destr:		    RCX RAX	R8D	R10B R9B\n"		
-                       // ";==============================================================\n"
-                    "\tdec_format:\n"
-                    "\tmov rsi, buffer\n"
-                    "\tadd rsi, BUFFER_SIZE\n"
-                    "\txor r10b, r10b\n"
-                    "\tmov r9, 10\n"
-                    "\tmov rcx, 19\n"
-                    "\tmov rax, r8\n"
-                    "\n"
-                    "\t.dec_format_loop:\n"
-                    "\tdec rsi\n"
-                    "\tinc r10b\n"
-                    "\n" 
-                    "\txor rdx, rdx\n"
-                    "\tdiv r9\n"
-                    "\n"
-                    "\tadd rdx, '0'\n"
-                    "\tmov [rsi], dl \n"
-                    "\tLOOP .dec_format_loop\n"
-                    "\n"
-                    "\txor rdx, rdx\n"
-                    "\tmov dl, r10b\n"
-                    "\n"
-                    "\tmov rax, ds\n"
-                    "\tmov es, rax\n"
-                    "\tmov al, '0'\n"
-                    "\tmov rcx, rdx\n"
-                    "\tdec rcx\n"
-                    "\t.skipping:\n"
-                    "\tcmp al, [rsi]\n"
-                    "\tjnz .break\n"
-                    "\tinc rsi\n"
-                    "\tdec rdx\n"
-                    "\tloop .skipping\n"
-                    "\t.break:\n"
-                    "\tret\n\n\n"
-
-                    "PRINT:\n"
-                    "\txor rax, rax\n"
-                    "\tcmp r8, rax\n"
-                    "\tjge .positive\n"
-                    "\n"
-                    "\tmov rsi, buffer\n"
-                    "\tmov rdx, 1\n"
-                    "\tmov byte [rsi], '-'\n"
-                    "\txor rax, rax\n"
-                    "\tinc rax\n"
-                    "\txor rdi, rdi\n"
-                    "\tsyscall\n"
-                    "\n"
-                    "\tneg r8\n"
-                    ".positive:\n"
-                    "\tpush r8\n"
-                    "\tshr r8, 10\n"
-                    "\tcall dec_format\n"
-                    "\txor rax, rax\n"
-                    "\tinc rax\n"
-                    "\txor rdi, rdi\n"
-                    "\tsyscall\n"
-                    "\tpop r8\n"
-                    "\n"
-                    "\tmov rsi, buffer\n"
-                    "\tmov rdx, 1\n"
-                    "\tmov byte [rsi], '.'\n"
-                    "\txor rax, rax\n"
-                    "\tinc rax\n"
-                    "\txor rdi, rdi\n"
-                    "\tsyscall\n"
-                    "\n"
-                    "\tand r8, 0x3FF\n"
-                    "\tshl r8, 10\n"
-                    "\tmov rax, r8\n"
-                    "\tcqo\n"
-                    "\tmov r8, 1000\n"
-                    "\tidiv r8\n"
-                    "\tmov r8, rax\n"
-                    "\tcall dec_format\n"
-                    "\txor rax, rax\n"
-                    "\tinc rax\n"
-                    "\txor rdi, rdi\n"
-                    "\tinc rdx\n"
-                    "\tsyscall\n"
-                    "\tret\n\n\n"
-                    
-
-                    ";==============================================================================\n"
-                    "; In:  rsi - buf to input\n"
-                    "; Out: rdx - string len\n"
-                    "; Destr: rdi, rax\n"
-                    ";==============================================================================\n"
-                    "gets:\n"
-                    "\tpush rsi\n\n"
-                        
-                    "\tmov rdi, 0\n"
-                    "\tmov rdx, 1\n\n"
-                    
-                    ".continue:\n"
-                    "\tmov rax, 0\n"
-                    "\tsyscall\n\n"
-
-                    "\tcmp byte [rsi], 10d\n"
-                    "\tje .exit\n\n"
-                        
-                    "\tinc rsi\n"
-                    "\tjmp .continue\n\n"
-                    
-                    ".exit:\n"
-                    "\tmov rdx, rsi\n"
-                    "\tpop rsi\n"
-                    "\tsub rdx, rsi\n\n"
-                    
-                    "\tret\n\n"
-                    "\n"
-                    "\n"
-                    "toInt:\n"
-                    "\txor r8, r8\n"
-                    "\tmov rdi, rsi\n"
-                    "\tadd rdi, rdx\n"
-                    "\tmov rcx, 1\n"
-                    "\tmov rbx, 10\n\n"
-                    ".loop:\n"
-                    "\tdec rdi\n"
-                    "\tcmp byte [rdi], '-'\n"
-                    "\tje .end\n"
-                    "\tmov bl, [rdi]\n"
-                    "\tsub bl, '0'\n"
-                    "\tmov rax, rcx\n"
-                    "\tmul bl\n"
-                    "\tadd r8, rax\n"
-                    "\tmov rax, rcx\n"
-                    "\tmul rbx\n"
-                    "\tmov rcx, rax\n"
-                    "\tcmp rdi, rsi\n"
-                    "\tjne .loop\n"
-                    
-                    ".end:\n"
-                    "\tcmp byte [rdi], '-'\n"
-                    "\tjne .positive\n"
-                    "\tshl r8, 10\n"
-                    "\tneg r8\n"
-                    "\tjmp .neg_end\n"
-                    ".positive:\n"
-                    "\tshl r8, 10\n"
-                    ".neg_end:\n"
-                    "\tmov rax, r8\n"
-                    "\tret\n\n\n"
-
-                    "SCAN:\n"
-                    "\tmov rsi, buffer\n"
-                    "\tcall gets\n"
-                    "\tmov rsi, buffer\n"
-                    "\tcall toInt\n"
-                    "\tret\n"
-                    "\n"
-                    "\n"
-                    "\n"
-                    "SQRT: \n"
-                    "\txor rbx, rbx\n"
-                    "\tbsr rcx, rax\n"
-                    "\tand cl,  0x0fe\n"
-                    "\tmov rdx, 1\n"
-                    "\tshl rdx, cl\n"
-                    ".refine:\n"
-                    "\tmov rsi, rbx\n"
-                    "\tadd rsi, rdx\n"
-                    "\tcmp rsi, rax\n"
-                    "\tja .@f\n"
-                    "\tsub rax, rsi\n"
-                    "\tshr rbx, 1\n"
-                    "\tadd rbx, rdx\n"
-                    "\tjmp .next\n"
-                    ".@f:\n"
-                    "\tshr rbx, 1\n"
-                    ".next :\n"
-                    "\tshr rdx, 2\n"
-                    "\tjnz .refine\n"
-                    "\tmov rax, rbx\n"
-                    "\tshl rax, 5\n"
-                    "\tret\n"
-                    ";==========INCLUDE DREW LIB==========\n\n");
-
-    */
+    SQRT_ADDR = CODE_POS;
+    SQRT_FUNC(PROGRAMM_CODE);
 
     elf_undertree (stream, code.head);
 
@@ -273,8 +83,6 @@ void write_to_elf (const CalcTree &code)
     prog_h.p_memsz = prog_h.p_filesz;
 
     sec_h.text_size = CODE_POS - (sec_h.text_offset - sizeof(ElfHeader) - sizeof(ProgHeader));
-
-    std::cout<<sizeof(ElfHeader) + sizeof(ProgHeader)<<'\n';
 
     char* elf_h_bytes = reinterpret_cast<char*>(&elf_h);
     fwrite(elf_h_bytes, 1, sizeof(ElfHeader), stream);
@@ -575,9 +383,22 @@ void elf_un_function (FILE* stream, CalcTree::Node_t *node)
     else if ( is_this_un_func (node->node_data.data.code, SQRT) )
     {
         elf_undertree (stream, node->right);
-        fprintf (stream, "\tpop rax\n"
-                         "\tcall SQRT\n"
-                         "\tpush rax\n");
+        pop_rax(PROGRAMM_CODE);
+
+        union{
+            uint32_t val;
+            char bytes[4];
+        } sqrt_add;
+
+        sqrt_add.val = SQRT_ADDR - (CODE_POS + 5) ;
+        *PROGRAMM_CODE++ = 0xe8;
+        ++CODE_POS;
+        for (int i = 0; i < 4; ++i) {
+            *PROGRAMM_CODE++ = sqrt_add.bytes[i];
+            ++CODE_POS;
+        }
+         
+        push_rax(PROGRAMM_CODE);
         return;
     }
     else if ( is_this_un_func (node->node_data.data.code, RETURN) )

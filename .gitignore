@@ -3,3 +3,7 @@ asm_code
 *.asm
 asm_code.o
 elf_code
+asm_code
+asm_code.asm
+asm_code.o
+elf_code

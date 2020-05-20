@@ -58,7 +58,7 @@ void write_to_elf (const CalcTree &code)
 
 
     PRINT_ADDR = PRINT_FUNC(PROGRAMM_CODE, BUFFER_ADDR + sizeof(ProgHeader) + sizeof(ElfHeader) + LOAD_ADDR);
-
+    SCAN_ADDR  = SCAN_FUNC(PROGRAMM_CODE, BUFFER_ADDR + sizeof(ProgHeader) + sizeof(ElfHeader) + LOAD_ADDR);
 
 
     /*// ";==============================================================\n"
@@ -593,8 +593,26 @@ void elf_un_function (FILE* stream, CalcTree::Node_t *node)
     }
     else if ( is_this_un_func (node->node_data.data.code, INPUT) )
     {
-        fprintf (stream, "\tcall SCAN\t\t\t\t\t\t\t\t; function INPUT\n");
-        fprintf (stream, "\tmov qword [rbp + 16 + 8*%d], rax\n", node->right->node_data.data.code);
+        union{
+            uint32_t val;
+            char bytes[4];
+        } scan_add;
+
+        scan_add.val = SCAN_ADDR - (CODE_POS + 5) ;
+        *PROGRAMM_CODE++ = 0xe8;
+        ++CODE_POS;
+        for (int i = 0; i < 4; ++i) {
+            *PROGRAMM_CODE++ = scan_add.bytes[i];
+            ++CODE_POS;
+        }
+        
+        *PROGRAMM_CODE++ = 0x48;
+        *PROGRAMM_CODE++ = 0x89;
+        *PROGRAMM_CODE++ = 0x45;
+        *PROGRAMM_CODE++ = 16 + 8*node->right->node_data.data.code;
+
+        CODE_POS += 4;
+
         if (node->right->node_data.type != VARIABLE)
             throw "Могу считать только в переменную!";
         return;
@@ -602,6 +620,9 @@ void elf_un_function (FILE* stream, CalcTree::Node_t *node)
     else
         throw "Не могу ELF эту унарную функцию";
 }
+
+
+
 
 void set_call_addr(char* buffer) {
     int call_num = calls.size();

@@ -414,6 +414,50 @@ void xor_rdi_rdi(char*& buffer) {
     WRITE_BUFFER(0xff);
 }
 
+void mov_rax_rcx(char*& buffer) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0x89);
+    WRITE_BUFFER(0xc8);
+}
+
+void dec_rdi(char*& buffer) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0xcf);
+}
+
+void add_rdi_rdx(char*& buffer) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0x01);
+    WRITE_BUFFER(0xd7);
+}
+
+void mov_rdi_rsi(char*& buffer) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0x89);
+    WRITE_BUFFER(0xf7);
+}
+
+void sub_rdx_rsi(char*& buffer) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0x29);
+    WRITE_BUFFER(0xf2);
+}
+
+void mov_rdx_rsi(char*& buffer) {
+    WRITE_BUFFER(0x48);
+    WRITE_BUFFER(0x89);
+    WRITE_BUFFER(0xf2);
+}
+
+void pop_rsi(char*& buffer) {
+    WRITE_BUFFER(0x5e);
+}
+
+void push_rsi(char*& buffer) {
+    WRITE_BUFFER(0x56);
+}
+
 uint32_t PRINT_FUNC(char*& buffer, uint32_t BUFFER_ADDR) {
 
     mov_rsi_const(buffer, BUFFER_ADDR);
@@ -608,5 +652,155 @@ uint32_t PRINT_FUNC(char*& buffer, uint32_t BUFFER_ADDR) {
     ret(buffer);
 
     return pos;
+}
 
+uint32_t SCAN_FUNC(char*& buffer, uint32_t BUFFER_ADDR) {
+
+    push_rsi(buffer);
+
+    WRITE_BUFFER(0xbf); //mov edi 0
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+
+    WRITE_BUFFER(0xba); //mov edx, 1
+    WRITE_BUFFER(0x01);
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+
+    WRITE_BUFFER(0xb8); //mov eax, 0
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+
+    syscall(buffer);
+
+    WRITE_BUFFER(0x80); //cmp byte[rsi], 0xa
+    WRITE_BUFFER(0x3e);
+    WRITE_BUFFER(0x0a);
+
+    je_byte(buffer, 0x05); //je gets.exit
+
+    inc_rsi(buffer);
+
+    jmp_byte(buffer, 0xef); //jmp gets.continue
+
+    mov_rdx_rsi(buffer);
+
+    pop_rsi(buffer);
+
+    sub_rdx_rsi(buffer);
+
+    ret(buffer);
+
+    xor_r8_r8(buffer);
+
+    mov_rdi_rsi(buffer);
+
+    add_rdi_rdx(buffer);
+
+    WRITE_BUFFER(0xb9); //mov ecx, 1
+    WRITE_BUFFER(0x01);
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+
+    WRITE_BUFFER(0xbb); //mov ebx, 0xa
+    WRITE_BUFFER(0x0a);
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+    WRITE_BUFFER(0x00);
+
+    dec_rdi(buffer);
+
+    WRITE_BUFFER(0x80); //cmp byte [rdi], 0x2d
+    WRITE_BUFFER(0x3f);
+    WRITE_BUFFER(0x2d);
+
+    je_byte(buffer, 0x1b); //je toInt.end
+
+    WRITE_BUFFER(0x8a); //mov bl, [rdi]
+    WRITE_BUFFER(0x1f);
+
+    WRITE_BUFFER(0x80); //sub bl, 0x30
+    WRITE_BUFFER(0xeb);
+    WRITE_BUFFER(0x30);
+
+    mov_rax_rcx(buffer);
+
+    WRITE_BUFFER(0xf6); //mul bl
+    WRITE_BUFFER(0xe3);
+
+    WRITE_BUFFER(0x49); //add r8 rax
+    WRITE_BUFFER(0x01);
+    WRITE_BUFFER(0xc0);
+
+    mov_rax_rcx(buffer);
+
+    WRITE_BUFFER(0x48); //mul rbx
+    WRITE_BUFFER(0xf7);
+    WRITE_BUFFER(0xe3);
+
+    WRITE_BUFFER(0x48); //mov rcx, rax
+    WRITE_BUFFER(0x89);
+    WRITE_BUFFER(0xc1);
+
+    WRITE_BUFFER(0x48); //cmp rdi, rsi
+    WRITE_BUFFER(0x39);
+    WRITE_BUFFER(0xf7);
+
+    jne_byte(buffer, 0xdd); //jne toInt.loop
+
+    WRITE_BUFFER(0x80); //cmp byte [rdi], 0x2d
+    WRITE_BUFFER(0x3f);
+    WRITE_BUFFER(0x2d);
+
+    jne_byte(buffer, 0x09); //jne toInt.positive
+
+    WRITE_BUFFER(0x49); //shl r8, 0xa
+    WRITE_BUFFER(0xc1);
+    WRITE_BUFFER(0xe0);
+    WRITE_BUFFER(0x0a);
+
+    WRITE_BUFFER(0x49); //neg r8
+    WRITE_BUFFER(0xf7);
+    WRITE_BUFFER(0xd8);
+
+    jmp_byte(buffer, 0x04); //jmp toInt.neg_end
+
+    WRITE_BUFFER(0x49); //shl r8, 0xa
+    WRITE_BUFFER(0xc1);
+    WRITE_BUFFER(0xe0);
+    WRITE_BUFFER(0x0a);
+
+    WRITE_BUFFER(0x4c); //mov rax r8
+    WRITE_BUFFER(0x89);
+    WRITE_BUFFER(0xc0);
+
+    ret(buffer);
+
+    uint32_t pos = CODE_POS;
+
+    mov_rsi_const(buffer, BUFFER_ADDR);
+
+    WRITE_BUFFER(0xe8); //call gets
+    WRITE_BUFFER(0x81);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0xff);
+
+    mov_rsi_const(buffer, BUFFER_ADDR);
+
+    WRITE_BUFFER(0xe8); //call toInt
+    WRITE_BUFFER(0x96);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0xff);
+    WRITE_BUFFER(0xff);
+
+    ret(buffer);
+
+    return pos;
 }

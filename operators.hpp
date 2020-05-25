@@ -27,6 +27,19 @@ const char* ASSGN     = "ПревратилсяВ";
 
 static const char* operators[] = {NOT_EQUAL, EQUAL, MORE, LESS, ADD, SUB, MUL, DIV, POW, ASSGN};
 
+enum OPERATOR{
+    NOT_EQUAL_OP = 0,
+    EQUAL_OP = 1,
+    MORE_OP = 2,
+    LESS_OP = 3,
+    ADD_OP = 4,
+    SUB_OP = 5,
+    MUL_OP = 6,
+    DIV_OP = 7,
+    POW_OP = 8,
+    ASSGN_OP = 9
+};
+
 bool is_operator (char* oper)
 {
     for (int i = 0; i < sizeof (operators) / sizeof (operators[0]); i++)

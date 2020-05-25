@@ -304,10 +304,6 @@ public:
         if (node -> node_data.type == OPERATOR)
             use_operator ( a, b, node -> node_data.data.code, result );
 
-        if (node -> node_data.type == UN_FUNCTION)
-        {
-            result = use_un_func (node -> node_data.data.code, b);
-        }
         return OPE::OK;
     }
 
@@ -515,12 +511,6 @@ private:
 
             simplify (node -> right);
 
-            if ( node -> right -> node_data.type == QUANTITY )
-            {
-                node -> node_data.type = QUANTITY;
-                node -> node_data.data.value = use_un_func ( node -> node_data.data.code, node -> right -> node_data.data.value);
-                kill_children (node);
-            }
             return OPE::OK;
         }
 

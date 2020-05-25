@@ -10,6 +10,11 @@ const char* WHILE = "ДляЛюбого";
 
 static const char* cond_operators[] = {IF, WHILE};
 
+enum COND_OPERATOR {
+    IF_COND_OP = 0,
+    WHILE_COND_OP = 1
+};
+
 bool is_this_cond_op (char code, const char* func)
 {   
     if ( ! strcmp ( cond_operators [code], func ) )

@@ -1,4 +1,4 @@
-#include <vector>
+#include "FreeAccessStack.hpp"
 #include "differ-tree.hpp"
 #include "nasm_commands.hpp"
 #include "elf_header.hpp"
@@ -23,8 +23,8 @@ const int PROG_MAX_SIZE = 100000;
 char CODE_BUF[PROG_MAX_SIZE];
 char* PROGRAMM_CODE = &CODE_BUF[0];
 
-std::vector<uint64_t> calls;
-std::vector<uint32_t> function_addr;
+FreeAccessStack<uint64_t> calls;
+FreeAccessStack<uint32_t> function_addr;
 
 
 uint32_t main_addr = 0;
@@ -204,242 +204,248 @@ void elf_undertree (FILE* stream, CalcTree::Node_t *node)
 
 void elf_operator (FILE* stream, CalcTree::Node_t *node)
 {
-    char code = node->node_data.data.code;
-
-    if (is_this_operator (code, ADD))
-    {
-        elf_undertree (stream, node -> left);
-        elf_undertree (stream, node -> right);
+    switch (node->node_data.data.code) {
+        case OPERATOR::ADD_OP: 
+            elf_undertree (stream, node -> left);
+            elf_undertree (stream, node -> right);
+            
+            pop_r10(PROGRAMM_CODE);
+            pop_r11(PROGRAMM_CODE);
+            add_r11_r10(PROGRAMM_CODE);
+            push_r11(PROGRAMM_CODE);
+            break;
         
-        pop_r10(PROGRAMM_CODE);
-        pop_r11(PROGRAMM_CODE);
-        add_r11_r10(PROGRAMM_CODE);
-        push_r11(PROGRAMM_CODE);
-        return;
-    }
-
-    if (is_this_operator (code, SUB))
-    {
-        elf_undertree (stream, node -> left);
-        elf_undertree (stream, node -> right);
+        case OPERATOR::SUB_OP:
+            elf_undertree (stream, node -> left);
+            elf_undertree (stream, node -> right);
+            
+            pop_r10(PROGRAMM_CODE);
+            pop_r11(PROGRAMM_CODE);
+            sub_r11_r10(PROGRAMM_CODE);
+            push_r11(PROGRAMM_CODE);
+            break;
         
-        pop_r10(PROGRAMM_CODE);
-        pop_r11(PROGRAMM_CODE);
-        sub_r11_r10(PROGRAMM_CODE);
-        push_r11(PROGRAMM_CODE);
-        return;
+        case OPERATOR::DIV_OP:
+            elf_undertree (stream, node -> left);
+            elf_undertree (stream, node -> right);
+            pop_r8(PROGRAMM_CODE);
+            pop_rax(PROGRAMM_CODE);
+            cqo(PROGRAMM_CODE);
+            idiv_r8(PROGRAMM_CODE);
+            mov_r9_rdx(PROGRAMM_CODE);
+            xor_rdx_rdx(PROGRAMM_CODE);
+            mov_r10_const(PROGRAMM_CODE, 1024);
+            imul_r10(PROGRAMM_CODE);
+            mov_r11_rax(PROGRAMM_CODE);
+            mov_rax_r9(PROGRAMM_CODE);
+            shr_r8(PROGRAMM_CODE, 10);
+            cqo(PROGRAMM_CODE);
+            idiv_r8(PROGRAMM_CODE);
+            add_rax_r11(PROGRAMM_CODE);
+            push_rax(PROGRAMM_CODE); 
+            break;
+
+        case OPERATOR::MUL_OP:
+            elf_undertree (stream, node -> left);
+            elf_undertree (stream, node -> right);
+            pop_rax(PROGRAMM_CODE);
+            pop_rcx(PROGRAMM_CODE);
+            imul_rcx(PROGRAMM_CODE);
+            shr_rax(PROGRAMM_CODE, 10);
+            shl_rdx(PROGRAMM_CODE, 54);
+            or_rax_rdx(PROGRAMM_CODE);
+            push_rax(PROGRAMM_CODE);
+            break;
+
+        case OPERATOR::ASSGN_OP:
+            elf_undertree (stream, node -> right);
+            if ( node->left->node_data.type != VARIABLE && node->left->node_data.type != ARGUMENT)
+                throw "Могу присвоить только переменной!";
+            pop_rbp_addr_plus(PROGRAMM_CODE, 16 + 8*node->left->node_data.data.code);
+            break; 
+
+        case OPERATOR::NOT_EQUAL_OP:
+            elf_undertree (stream, node -> left);
+            elf_undertree (stream, node -> right);
+
+            pop_r10(PROGRAMM_CODE);
+            pop_r11(PROGRAMM_CODE);
+            cmp_r10_r11(PROGRAMM_CODE);
+
+            jne_byte(PROGRAMM_CODE, 0x04);
+            push_byte(PROGRAMM_CODE, 0);
+            jmp_byte(PROGRAMM_CODE, 0x02);
+            push_byte(PROGRAMM_CODE, 1);
+            break;
+
+        case OPERATOR::EQUAL_OP:
+            elf_undertree (stream, node -> left);
+            elf_undertree (stream, node -> right);
+
+            pop_r10(PROGRAMM_CODE);
+            pop_r11(PROGRAMM_CODE);
+            cmp_r10_r11(PROGRAMM_CODE);
+            je_byte(PROGRAMM_CODE, 0x04);
+            push_byte(PROGRAMM_CODE, 0);
+            jmp_byte(PROGRAMM_CODE, 0x02);
+            push_byte(PROGRAMM_CODE, 1);
+            break;
+
+        case OPERATOR::LESS_OP:
+            elf_undertree (stream, node -> left);
+            elf_undertree (stream, node -> right);
+            pop_r10(PROGRAMM_CODE);
+            pop_r11(PROGRAMM_CODE);
+            cmp_r11_r10(PROGRAMM_CODE);
+            jl_byte(PROGRAMM_CODE, 0x04);
+            push_byte(PROGRAMM_CODE, 0);
+            jmp_byte(PROGRAMM_CODE, 0x02);
+            push_byte(PROGRAMM_CODE, 1);
+            break; 
+
+        
+        case OPERATOR::MORE_OP:
+            elf_undertree (stream, node -> left);
+            elf_undertree (stream, node -> right);
+            pop_r10(PROGRAMM_CODE);
+            pop_r11(PROGRAMM_CODE);
+            cmp_r11_r10(PROGRAMM_CODE);
+            jg_byte(PROGRAMM_CODE, 0x04);
+            push_byte(PROGRAMM_CODE, 0);
+            jmp_byte(PROGRAMM_CODE, 0x02);
+            push_byte(PROGRAMM_CODE, 1);
+            break; 
+
+        default:
+            throw "CANNOT ELF THIS OPERATOR";
+            break;
     }
 
-    if (is_this_operator (code, DIV))
-    {
-        elf_undertree (stream, node -> left);
-        elf_undertree (stream, node -> right);
-        pop_r8(PROGRAMM_CODE);
-        pop_rax(PROGRAMM_CODE);
-        cqo(PROGRAMM_CODE);
-        idiv_r8(PROGRAMM_CODE);
-        mov_r9_rdx(PROGRAMM_CODE);
-        xor_rdx_rdx(PROGRAMM_CODE);
-        mov_r10_const(PROGRAMM_CODE, 1024);
-        imul_r10(PROGRAMM_CODE);
-        mov_r11_rax(PROGRAMM_CODE);
-        mov_rax_r9(PROGRAMM_CODE);
-        shr_r8(PROGRAMM_CODE, 10);
-        cqo(PROGRAMM_CODE);
-        idiv_r8(PROGRAMM_CODE);
-        add_rax_r11(PROGRAMM_CODE);
-        push_rax(PROGRAMM_CODE);     
-        return;
-    }
-
-    if (is_this_operator (code, MUL))
-    { 
-        elf_undertree (stream, node -> left);
-        elf_undertree (stream, node -> right);
-        pop_rax(PROGRAMM_CODE);
-        pop_rcx(PROGRAMM_CODE);
-        imul_rcx(PROGRAMM_CODE);
-        shr_rax(PROGRAMM_CODE, 10);
-        shl_rdx(PROGRAMM_CODE, 54);
-        or_rax_rdx(PROGRAMM_CODE);
-        push_rax(PROGRAMM_CODE);
-        return;
-    }
-
-    if (is_this_operator (code, ASSGN))
-    {
-        elf_undertree (stream, node -> right);
-        if ( node->left->node_data.type != VARIABLE && node->left->node_data.type != ARGUMENT)
-            throw "Могу присвоить только переменной!";
-        pop_rbp_addr_plus(PROGRAMM_CODE, 16 + 8*node->left->node_data.data.code);
-        return;   
-    }
-
-    if (is_this_operator (code, NOT_EQUAL))
-    {
-        elf_undertree (stream, node -> left);
-        elf_undertree (stream, node -> right);
-
-        pop_r10(PROGRAMM_CODE);
-        pop_r11(PROGRAMM_CODE);
-        cmp_r10_r11(PROGRAMM_CODE);
-
-        jne_byte(PROGRAMM_CODE, 0x04);
-        push_byte(PROGRAMM_CODE, 0);
-        jmp_byte(PROGRAMM_CODE, 0x02);
-        push_byte(PROGRAMM_CODE, 1);
-
-        return;
-    }
-
-    if (is_this_operator (code, EQUAL))
-    {
-        elf_undertree (stream, node -> left);
-        elf_undertree (stream, node -> right);
-
-        pop_r10(PROGRAMM_CODE);
-        pop_r11(PROGRAMM_CODE);
-        cmp_r10_r11(PROGRAMM_CODE);
-        je_byte(PROGRAMM_CODE, 0x04);
-        push_byte(PROGRAMM_CODE, 0);
-        jmp_byte(PROGRAMM_CODE, 0x02);
-        push_byte(PROGRAMM_CODE, 1);
-
-        return; 
-    }
-
-    if (is_this_operator (code, LESS))
-    {
-        elf_undertree (stream, node -> left);
-        elf_undertree (stream, node -> right);
-        pop_r10(PROGRAMM_CODE);
-        pop_r11(PROGRAMM_CODE);
-        cmp_r11_r10(PROGRAMM_CODE);
-        jl_byte(PROGRAMM_CODE, 0x04);
-        push_byte(PROGRAMM_CODE, 0);
-        jmp_byte(PROGRAMM_CODE, 0x02);
-        push_byte(PROGRAMM_CODE, 1);
-        return; 
-    }
-
-    if (is_this_operator (code, MORE))
-    {
-        elf_undertree (stream, node -> left);
-        elf_undertree (stream, node -> right);
-        pop_r10(PROGRAMM_CODE);
-        pop_r11(PROGRAMM_CODE);
-        cmp_r11_r10(PROGRAMM_CODE);
-        jg_byte(PROGRAMM_CODE, 0x04);
-        push_byte(PROGRAMM_CODE, 0);
-        jmp_byte(PROGRAMM_CODE, 0x02);
-        push_byte(PROGRAMM_CODE, 1);
-        return; 
-    }
-
-    DEBUG_CODE(printf ("%s\n", operators[node->node_data.data.code]))
-    throw "CANNOT ELF THIS OPERATOR";
+    DEBUG_CODE(printf ("%s\n", operators[node->node_data.data.code]));
 
 }
 
 
 void elf_cond_operator (FILE* stream, CalcTree::Node_t *node) 
 {
-    if ( is_this_cond_op (node->node_data.data.code, "Если" ) )
-    {
+    switch (node->node_data.data.code) {
 
-        elf_undertree (stream, node->left);
-        pop_r10(PROGRAMM_CODE);
-        xor_r11_r11(PROGRAMM_CODE);
-        cmp_r10_r11(PROGRAMM_CODE);
-        uint64_t jmp_pos = CODE_POS + 1;
-        je_byte(PROGRAMM_CODE, 0);
-        elf_undertree (stream, node->right);
-        CODE_BUF[jmp_pos] = CODE_POS - (jmp_pos+1);
-    }
+        case COND_OPERATOR::IF_COND_OP:
+        {
+            elf_undertree (stream, node->left);
+            pop_r10(PROGRAMM_CODE);
+            xor_r11_r11(PROGRAMM_CODE);
+            cmp_r10_r11(PROGRAMM_CODE);
+            uint64_t jmp_pos = CODE_POS + 1;
+            je_byte(PROGRAMM_CODE, 0);
+            elf_undertree (stream, node->right);
+            CODE_BUF[jmp_pos] = CODE_POS - (jmp_pos+1);
+            break;
+        }
+
+        case COND_OPERATOR::WHILE_COND_OP:
+        {
+            uint64_t while_begin = CODE_POS;
+            elf_undertree (stream, node->left);
+            pop_r10(PROGRAMM_CODE);
+            xor_r11_r11(PROGRAMM_CODE);
+            cmp_r10_r11(PROGRAMM_CODE);
+            uint64_t jmp_pos = CODE_POS + 1;
+            je_byte(PROGRAMM_CODE, 0);
+            elf_undertree (stream, node->right);
+            jmp_byte(PROGRAMM_CODE, while_begin);
+            CODE_BUF[jmp_pos] = CODE_POS - (jmp_pos+1);
+            break;
+        }
+        default:
+            throw "Cannot elf this conditional operator"; 
+    } 
 }
+
+
+
 
 void elf_un_function (FILE* stream, CalcTree::Node_t *node)
 {
-    if ( is_this_un_func (node->node_data.data.code, PRINT) )
-    {
-        elf_undertree (stream, node->right);
-        pop_r8(PROGRAMM_CODE);
 
-        union{
-            uint32_t val;
-            char bytes[4];
-        } print_add;
+    switch (node->node_data.data.code) {
+        case UN_FUNCTION::PRINT_UN_FUNC:
+            elf_undertree (stream, node->right);
+            pop_r8(PROGRAMM_CODE);
 
-        print_add.val = PRINT_ADDR - (CODE_POS + 5) ;
-        *PROGRAMM_CODE++ = 0xe8;
-        ++CODE_POS;
-        for (int i = 0; i < 4; ++i) {
-            *PROGRAMM_CODE++ = print_add.bytes[i];
+            union{
+                uint32_t val;
+                char bytes[4];
+            } print_add;
+
+            print_add.val = PRINT_ADDR - (CODE_POS + 5) ;
+            *PROGRAMM_CODE++ = 0xe8;
             ++CODE_POS;
-        }
-        return;
-    }
-    
-    else if ( is_this_un_func (node->node_data.data.code, SQRT) )
-    {
-        elf_undertree (stream, node->right);
-        pop_rax(PROGRAMM_CODE);
+            for (int i = 0; i < 4; ++i) {
+                *PROGRAMM_CODE++ = print_add.bytes[i];
+                ++CODE_POS;
+            }
+            break;
 
-        union{
-            uint32_t val;
-            char bytes[4];
-        } sqrt_add;
-
-        sqrt_add.val = SQRT_ADDR - (CODE_POS + 5) ;
-        *PROGRAMM_CODE++ = 0xe8;
-        ++CODE_POS;
-        for (int i = 0; i < 4; ++i) {
-            *PROGRAMM_CODE++ = sqrt_add.bytes[i];
-            ++CODE_POS;
-        }
-         
-        push_rax(PROGRAMM_CODE);
-        return;
-    }
-    else if ( is_this_un_func (node->node_data.data.code, RETURN) )
-    {
-        elf_undertree (stream, node->right);
-        if (node->right) {
+        case UN_FUNCTION::SQRT_UN_FUNC:
+            elf_undertree (stream, node->right);
             pop_rax(PROGRAMM_CODE);
-            elf_return_value = true;
-        }   
-        pop_rbp(PROGRAMM_CODE);
-        ret(PROGRAMM_CODE);
-        return;
-    }
-    else if ( is_this_un_func (node->node_data.data.code, INPUT) )
-    {
-        union{
-            uint32_t val;
-            char bytes[4];
-        } scan_add;
 
-        scan_add.val = SCAN_ADDR - (CODE_POS + 5) ;
-        *PROGRAMM_CODE++ = 0xe8;
-        ++CODE_POS;
-        for (int i = 0; i < 4; ++i) {
-            *PROGRAMM_CODE++ = scan_add.bytes[i];
+            union{
+                uint32_t val;
+                char bytes[4];
+            } sqrt_add;
+
+            sqrt_add.val = SQRT_ADDR - (CODE_POS + 5) ;
+            *PROGRAMM_CODE++ = 0xe8;
             ++CODE_POS;
-        }
-        
-        *PROGRAMM_CODE++ = 0x48;
-        *PROGRAMM_CODE++ = 0x89;
-        *PROGRAMM_CODE++ = 0x45;
-        *PROGRAMM_CODE++ = 16 + 8*node->right->node_data.data.code;
+            for (int i = 0; i < 4; ++i) {
+                *PROGRAMM_CODE++ = sqrt_add.bytes[i];
+                ++CODE_POS;
+            }
+            
+            push_rax(PROGRAMM_CODE);
+            break;  
 
-        CODE_POS += 4;
+        case UN_FUNCTION::RETURN_UN_FUNC:
+            elf_undertree (stream, node->right);
+            if (node->right) {
+                pop_rax(PROGRAMM_CODE);
+                elf_return_value = true;
+            }   
+            pop_rbp(PROGRAMM_CODE);
+            ret(PROGRAMM_CODE);
+            break;
 
-        if (node->right->node_data.type != VARIABLE)
-            throw "Могу считать только в переменную!";
-        return;
+        case UN_FUNCTION::INPUT_UN_FUNC:
+            union{
+                uint32_t val;
+                char bytes[4];
+            } scan_add;
+
+            scan_add.val = SCAN_ADDR - (CODE_POS + 5) ;
+            *PROGRAMM_CODE++ = 0xe8;
+            ++CODE_POS;
+            for (int i = 0; i < 4; ++i) {
+                *PROGRAMM_CODE++ = scan_add.bytes[i];
+                ++CODE_POS;
+            }
+            
+            *PROGRAMM_CODE++ = 0x48;
+            *PROGRAMM_CODE++ = 0x89;
+            *PROGRAMM_CODE++ = 0x45;
+            *PROGRAMM_CODE++ = 16 + 8*node->right->node_data.data.code;
+
+            CODE_POS += 4;
+
+            if (node->right->node_data.type != VARIABLE)
+                throw "Могу считать только в переменную!";
+            break;
+
+        default:
+            throw "Не могу ELF эту унарную функцию";
+
     }
-    else
-        throw "Не могу ELF эту унарную функцию";
 }
 
 
